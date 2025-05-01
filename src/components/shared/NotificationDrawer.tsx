@@ -3,11 +3,6 @@
 import { Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import {
-  markAllAsRead,
-  selectUnreadCount,
-} from "@/redux/features/notificationSlice";
 import {
   Sheet,
   SheetTrigger,
@@ -16,15 +11,15 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
+import { useAppContext } from "@/providers/ContextProvider";
 
 export const NotificationDrawer = () => {
   const [open, setOpen] = useState(false);
-  const unreadCount = useAppSelector(selectUnreadCount);
-  const messages = useAppSelector((state) => state.notification.messages);
-  const dispatch = useAppDispatch();
+  const { messages, markAllAsRead } = useAppContext();
+  const unreadCount = messages.length;
 
   const handleOpen = () => {
-    dispatch(markAllAsRead());
+    markAllAsRead();
   };
 
   return (

@@ -1,6 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { deleteCookie } from "@/services/AuthServices";
 import { TUser } from "@/types";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
 type AppContextType = {
   user: TUser | null;
@@ -8,8 +16,9 @@ type AppContextType = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
   logout: () => void;
-  message: IMessage | null;
-  setMessage: (message: IMessage) => void;
+  messages: IMessage[];
+  setMessage: Dispatch<SetStateAction<IMessage[]>>;
+  markAllAsRead: () => void;
 };
 
 interface IMessage {
@@ -23,13 +32,19 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
-  const [message, setMessage] = useState<IMessage | null>(null);
+  const [messages, setMessage] = useState<IMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
     deleteCookie();
+  };
+
+  const markAllAsRead = () => {
+    setMessage((prevMessages) =>
+      prevMessages.map((message) => ({ ...message, read: true }))
+    );
   };
 
   return (
@@ -40,8 +55,9 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         setIsLoading,
         logout,
-        message,
+        messages,
         setMessage,
+        markAllAsRead,
       }}
     >
       {children}

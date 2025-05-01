@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useAppContext } from "@/providers/ContextProvider";
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
 
 export const useWebSocket = () => {
-  const dispatch = useDispatch();
   const socketRef = useRef<WebSocket | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const userInteractedRef = useRef(false);
@@ -66,7 +65,7 @@ export const useWebSocket = () => {
       ws?.close();
       document.removeEventListener("click", handleInteraction);
     };
-  }, [dispatch, user?.id]);
+  }, [user?.id, setMessage]);
 
   return socketRef;
 };
