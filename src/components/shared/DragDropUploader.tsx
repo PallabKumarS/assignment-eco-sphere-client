@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { uploadToCloudinary } from "@/services/uploadToCloudinary";
+import { uploadToCloudinary } from "@/services/utils/uploadToCloudinary";
 
 interface DragDropProps {
   name: string;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { toast } from "sonner";
@@ -16,11 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { PasswordInput } from "../ui/password-input";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAppDispatch } from "@/redux/hook";
-import { login } from "@/redux/features/authSlice";
-import { useLoginMutation } from "@/redux/api/authApi";
-import { setCookies } from "@/services/auth.services";
 import ButtonLoader from "../shared/ButtonLoader";
+import { useState } from "react";
+import { loginUser } from "@/services/AuthService";
+import { useAppContext } from "@/providers/ContextProvider";
 
 const formSchema = z.object({
   email: z.string(),
@@ -28,12 +28,12 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
-  const [loginUser, { isLoading }] = useLoginMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirectPath");
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const { setToken } = useAppContext();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,14 +41,15 @@ export default function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const toastId = toast.loading("logging in...");
+    setIsLoading(true);
+
     try {
-      const res = await loginUser(values).unwrap();
+      const res = await loginUser(values);
 
       if (res?.success) {
-        dispatch(login(res?.data?.accessToken));
+        setToken(res?.data.accessToken);
+        setIsLoading(false);
 
-        // set cookies manually
-        await setCookies(res?.data?.accessToken, res?.data?.refreshToken);
         toast.success(res?.message, { id: toastId });
         if (redirectPath) {
           router.push(redirectPath);

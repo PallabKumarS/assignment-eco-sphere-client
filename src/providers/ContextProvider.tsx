@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { deleteCookie } from "@/services/AuthServices";
+import Loading from "@/app/loading";
+import { getToken } from "@/lib/verifyToken";
+import { deleteCookie } from "@/services/AuthService";
+import { getMe } from "@/services/UserService";
 import { TUser } from "@/types";
 import {
   createContext,
@@ -7,6 +9,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -16,36 +19,51 @@ type AppContextType = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
   logout: () => void;
-  messages: IMessage[];
-  setMessage: Dispatch<SetStateAction<IMessage[]>>;
-  markAllAsRead: () => void;
+  setToken: Dispatch<SetStateAction<string | null>>;
 };
-
-interface IMessage {
-  userId: string;
-  content: string;
-  read?: boolean;
-  [key: string]: any;
-}
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
-  const [messages, setMessage] = useState<IMessage[]>([]);
+  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const initialize = async () => {
+      const token = await getToken();
+      if (token) {
+        setToken(token);
+
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        } else {
+          const res = await getMe();
+          if (res?.success) {
+            setUser(res.data);
+            localStorage.setItem("user", JSON.stringify(res.data));
+          }
+        }
+      } else {
+        setUser(null);
+        setToken(null);
+      }
+
+      setIsLoading(false);
+    };
+
+    initialize();
+  }, []);
 
   const logout = () => {
     setUser(null);
+    setToken(null);
     localStorage.removeItem("user");
     deleteCookie();
   };
 
-  const markAllAsRead = () => {
-    setMessage((prevMessages) =>
-      prevMessages.map((message) => ({ ...message, read: true }))
-    );
-  };
+  if (isLoading) return <Loading />;
 
   return (
     <AppContext.Provider
@@ -55,9 +73,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         setIsLoading,
         logout,
-        messages,
-        setMessage,
-        markAllAsRead,
+        setToken,
       }}
     >
       {children}
@@ -70,6 +86,6 @@ export default ContextProvider;
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context)
-    throw new Error("useAppContext must be used within AppProvider");
+    throw new Error("useAppContext must be used within ContextProvider");
   return context;
 };

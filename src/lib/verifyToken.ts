@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { jwtDecode } from "jwt-decode";
@@ -19,12 +20,12 @@ export const isTokenExpired = async (token: string): Promise<boolean> => {
 export const getValidToken = async (): Promise<string> => {
   const cookieStore = await cookies();
 
-  let token = cookieStore.get("access_token")!.value;
+  let token = cookieStore.get("accessToken")!.value;
 
   if (!token || (await isTokenExpired(token))) {
     const { data } = await getNewToken();
     token = data?.accessToken;
-    cookieStore.set("access_token", token);
+    cookieStore.set("accessToken", token);
   }
 
   return token;
@@ -32,16 +33,13 @@ export const getValidToken = async (): Promise<string> => {
 
 const getNewToken = async () => {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: (await cookies()).get("refresh_token")!.value,
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_API}/auth/refresh-token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: (await cookies()).get("refreshToken")!.value,
+      },
+    });
 
     return res.json();
   } catch (error: any) {
@@ -50,7 +48,7 @@ const getNewToken = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const accessToken = (await cookies()).get("access_token")?.value;
+  const accessToken = (await cookies()).get("accessToken")?.value;
   let decodedData = null;
 
   if (accessToken) {
@@ -61,8 +59,13 @@ export const getCurrentUser = async () => {
   }
 };
 
+export const getToken = async () => {
+  const accessToken = (await cookies()).get("accessToken")?.value;
+  return accessToken;
+};
+
 type DecodedUser = {
-  userId: string;
+  id: string;
   role: "admin" | "buyer" | "seller";
   email: string;
   iat: number;

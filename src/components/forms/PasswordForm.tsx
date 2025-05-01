@@ -13,8 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "../ui/password-input";
-import { LoaderCircleIcon } from "lucide-react";
-import { useChangePasswordMutation } from "@/redux/api/authApi";
+import { useState } from "react";
 import ButtonLoader from "../shared/ButtonLoader";
 
 const formSchema = z.object({
@@ -24,7 +23,7 @@ const formSchema = z.object({
 });
 
 export default function PasswordForm() {
-  const [passwordChange, { isLoading }] = useChangePasswordMutation();
+  const [isLoading, setIsLoading] = useState(true);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,13 +38,15 @@ export default function PasswordForm() {
       const res = await passwordChange({
         oldPassword: values.oldPassword,
         newPassword: values.newPassword,
-      }).unwrap();
+      });
 
       if (res?.success) {
         toast.success(res?.message, { id: toastId });
+        setIsLoading(false);
       } else {
         toast.error(res?.message, { id: toastId });
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Form submission error", error);
       toast.error(error.data.message, { id: toastId });

@@ -26,7 +26,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ThemeToggle } from "./ThemeToggle";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
-import { NotificationDrawer } from "./NotificationDrawer";
 import { useAppContext } from "@/providers/ContextProvider";
 import { config } from "@/middleware";
 
@@ -162,7 +161,6 @@ export default function Navbar() {
           <ThemeToggle />
           <Link href={"/cart"}>
           </Link>
-          <NotificationDrawer />
 
           {/* Mobile Menu Button */}
           <Button

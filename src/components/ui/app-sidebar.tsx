@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  Settings,
   LogOut,
   User,
   PackageOpen,
   Users,
-  FileText,
   LogIn,
   HomeIcon,
   TrainTrack,
@@ -46,59 +44,40 @@ const items = [
     href: "/",
   },
   {
-    title: "All Listings",
+    title: "All Ideas",
     icon: PackageOpen,
-    href: "/listings",
+    href: "/ideas",
   },
   {
     title: "Profile",
     icon: User,
     href: `/dashboard/profile`,
   },
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/dashboard/settings",
-  },
 ];
 
 // admin routes
 const adminRoutes = [
   {
-    title: "Users",
+    title: "User Management",
     icon: Users,
     href: "/dashboard/admin/user-management",
   },
   {
-    title: "Listings",
+    title: "Idea Management",
     icon: PackageOpen,
-    href: "/dashboard/admin/listing-management",
+    href: "/dashboard/admin/idea-management",
   },
   {
-    title: "Category",
+    title: "Category Management",
     icon: FileSearch,
     href: "/dashboard/admin/category-management",
   },
 ];
 
-// seller routes
-const sellerRoutes = [
-  {
-    title: "My Listings",
-    icon: PackageOpen,
-    href: "/dashboard/seller/create-listing",
-  },
-  {
-    title: "Orders",
-    icon: FileText,
-    href: "/dashboard/seller/orders",
-  },
-];
-
 // buyer routes
-const buyerRoutes = [
+const memberRoutes = [
   {
-    title: "Track Orders",
+    title: "Track Ideas",
     icon: TrainTrack,
     href: "/dashboard/buyer/track",
   },
@@ -184,7 +163,7 @@ export function AppSidebar() {
                       className="text-gradient"
                       style={{ fontSize: "26px" }}
                     >
-                      Lagbe Kichu
+                      Eco Sphere
                     </span>
                   </a>
                 </SidebarMenuButton>
@@ -199,7 +178,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Admin Panel */}
-        {user?.role === "admin" && (
+        {user?.role === "ADMIN" && (
           <SidebarGroup>
             <SidebarGroupLabel className="flex items-center gap-2">
               <Users className="w-4 h-4 text-muted-foreground" />
@@ -211,28 +190,15 @@ export function AppSidebar() {
           </SidebarGroup>
         )}
 
-        {/* Seller Panel */}
-        {user?.role === "seller" && (
-          <SidebarGroup>
-            <SidebarGroupLabel className="flex items-center gap-2">
-              <PackageOpen className="w-4 h-4 text-muted-foreground" />
-              Seller
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              {renderMenuItems(sellerRoutes)}
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-
-        {/* Buyer Panel */}
-        {user?.role === "buyer" && (
+        {/* Member Panel */}
+        {user?.role === "MEMBER" && (
           <SidebarGroup>
             <SidebarGroupLabel className="flex items-center gap-2">
               <TrainTrack className="w-4 h-4 text-muted-foreground" />
-              Buyer
+              Member
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              {renderMenuItems(buyerRoutes)}
+              {renderMenuItems(memberRoutes)}
             </SidebarGroupContent>
           </SidebarGroup>
         )}
@@ -268,7 +234,7 @@ export function AppSidebar() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start" side="top">
-              {user ? (
+              {user?.email ? (
                 <DropdownMenuItem
                   className="text-destructive focus:text-destructive-foreground cursor-pointer flex items-center gap-3"
                   onClick={handleLogout}

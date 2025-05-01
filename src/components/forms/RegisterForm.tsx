@@ -7,7 +7,6 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,20 +15,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 import { PasswordInput } from "../ui/password-input";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { useRegisterMutation } from "@/redux/api/authApi";
 import ButtonLoader from "../shared/ButtonLoader";
+import { registerUser } from "@/services/AuthService";
+import { Dispatch, SetStateAction, useState } from "react";
+import { DragDropUploader } from "../shared/DragDropUploader";
 
 const formSchema = z.object({
   name: z.string(),
   email: z.string(),
-  role: z.string(),
+  profilePhoto: z.string().optional(),
   password: z.string(),
   passwordConfirm: z.string(),
 });
 
-export default function RegisterForm() {
-  const [registerUser, { isLoading }] = useRegisterMutation();
+export default function RegisterForm({
+  setActiveTab,
+}: {
+  setActiveTab: Dispatch<SetStateAction<"login" | "register">>;
+}) {
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,14 +44,21 @@ export default function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const toastId = toast.loading("Creating user...");
+    setIsLoading(true);
+
     try {
-      const res = await registerUser(values).unwrap();
+      const res = await registerUser(values);
+      console.log(res)
+
       if (res?.success) {
         toast.success(res?.message, { id: toastId });
+        setActiveTab("login");
+        setIsLoading(false);
       } else {
         toast.error(res?.message, { id: toastId });
       }
-    } catch (error:any) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error("Form submission error", error);
       toast.error(error.data.message, { id: toastId });
     }
@@ -100,38 +111,28 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* role field  */}
+        {/* profile photo field  */}
         <FormField
           control={form.control}
-          name="role"
+          name="profilePhoto"
           render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Role</FormLabel>
+            <FormItem>
+              <FormLabel>Profile Photo</FormLabel>
               <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  className="flex flex-col space-y-1"
-                >
-                  {[
-                    ["Buyer", "buyer"],
-                    ["Seller", "seller"],
-                  ].map((option, index) => (
-                    <FormItem
-                      className="flex items-center space-x-3 space-y-0"
-                      key={index}
-                    >
-                      <FormControl>
-                        <RadioGroupItem value={option[1]} />
-                      </FormControl>
-                      <FormLabel className="font-normal">{option[0]}</FormLabel>
-                    </FormItem>
-                  ))}
-                </RadioGroup>
+                <Input
+                  placeholder="Enter your Profile Photo Link"
+                  type="text"
+                  {...field}
+                  value={field.value || ""}
+                />
               </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <DragDropUploader name="profilePhoto" />
 
         {/* password field  */}
         <FormField
