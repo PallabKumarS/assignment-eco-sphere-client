@@ -62,7 +62,7 @@ const Privacy = () => {
         <motion.div variants={itemVariants} className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-primary">Privacy Policy</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            At Lagbe Kichu, we take your privacy seriously. This policy outlines
+            At Eco Sphere, we take your privacy seriously. This policy outlines
             how we collect, use, and protect your personal information during
             your product discovery journey.
           </p>
