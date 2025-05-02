@@ -31,7 +31,7 @@ import { T${capitalize(moduleName)} } from "@/types";
 // Get all ${moduleName}s
 export const getAll${capitalize(moduleName)}s = async () => {
   try {
-    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s\`, {
+    const res = await fetch(\`\${process.env.BASE_API}/${moduleName.toLowerCase()}s\`, {
       next: {
         tags: ["${moduleName}s"],
       },

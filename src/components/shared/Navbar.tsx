@@ -57,7 +57,7 @@ export default function Navbar() {
           className="flex-shrink-0 cursor-pointer group"
         >
           <h1 className="text-2xl font-black transition-all duration-300 group-hover:scale-105">
-            <span className="text-gradient">Lagbe Kichu</span>
+            <span className="text-gradient">Eco Sphere</span>
           </h1>
         </div>
 
@@ -159,8 +159,7 @@ export default function Navbar() {
           )}
 
           <ThemeToggle />
-          <Link href={"/cart"}>
-          </Link>
+          <Link href={"/cart"}></Link>
 
           {/* Mobile Menu Button */}
           <Button
