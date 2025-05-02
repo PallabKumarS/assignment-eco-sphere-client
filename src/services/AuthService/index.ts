@@ -10,6 +10,10 @@ export const setCookies = async (accessToken: string, refreshToken: string) => {
   (await cookies()).set("refreshToken", refreshToken);
 };
 
+export const setAccessToken = async (accessToken: string) => {
+  (await cookies()).set("accessToken", accessToken);
+};
+
 export const deleteCookie = async () => {
   (await cookies()).delete("accessToken");
   (await cookies()).delete("refreshToken");
