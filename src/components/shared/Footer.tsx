@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Package,
   ShoppingCart,
   Mail,
   Phone,
@@ -9,6 +8,7 @@ import {
   Facebook,
   Instagram,
   X,
+  LightbulbIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -44,7 +44,7 @@ const Footer = () => {
               }}
               className="transition-transform hover:scale-105 flex items-center justify-center"
             >
-              <Package className="mr-2 text-primary size-9" />
+              <LightbulbIcon className="mr-2 text-primary size-9" />
               <h1 className="text-2xl font-black">
                 <span className="text-gradient">Eco Sphere</span>
               </h1>

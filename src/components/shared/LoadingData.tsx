@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Package } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 const LoadingData = () => {
   return (
@@ -31,7 +31,7 @@ const LoadingData = () => {
             repeatType: "loop",
           }}
         >
-          <Package className="w-24 h-24 text-primary" strokeWidth={1.5} />
+          <Lightbulb className="w-24 h-24 text-primary" strokeWidth={1.5} />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -45,7 +45,7 @@ const LoadingData = () => {
           }}
           className="mt-6 text-xl font-semibold text-muted-foreground"
         >
-          Finding your perfect product...
+          Loading data...
         </motion.div>
       </motion.div>
     </div>

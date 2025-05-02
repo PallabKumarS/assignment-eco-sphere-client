@@ -3,16 +3,16 @@
 import {
   LogOut,
   User,
-  PackageOpen,
   Users,
   LogIn,
   HomeIcon,
   TrainTrack,
-  Package,
   FileSearch,
   ChevronRight,
   ChevronDown,
   FilePenLineIcon,
+  LightbulbIcon,
+  Lightbulb,
 } from "lucide-react";
 
 import {
@@ -45,7 +45,7 @@ const items = [
   },
   {
     title: "All Ideas",
-    icon: PackageOpen,
+    icon: Lightbulb,
     href: "/ideas",
   },
   {
@@ -64,7 +64,7 @@ const adminRoutes = [
   },
   {
     title: "Idea Management",
-    icon: PackageOpen,
+    icon: LightbulbIcon,
     href: "/dashboard/admin/idea-management",
   },
   {
@@ -158,7 +158,7 @@ export function AppSidebar() {
                     href="/"
                     className="flex items-center gap-3 hover:scale-105 transition-transform"
                   >
-                    <Package className="text-primary" />
+                    <LightbulbIcon className="text-primary" />
                     <span
                       className="text-gradient"
                       style={{ fontSize: "26px" }}
