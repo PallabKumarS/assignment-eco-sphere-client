@@ -5,9 +5,13 @@ import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
 
 // Get all users
-export const getAllUsers = async () => {
+export const getAllUsers = async (query: Record<string, unknown>) => {
+  const queryString = new URLSearchParams(
+    query as Record<string, string>
+  ).toString();
+
   try {
-    const res = await fetch(`${process.env.BASE_API}/users`, {
+    const res = await fetch(`${process.env.BASE_API}/users?${queryString}`, {
       next: {
         tags: ["users"],
       },

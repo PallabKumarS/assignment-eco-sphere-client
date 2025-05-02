@@ -36,7 +36,7 @@ export default function Navbar() {
   const { user, logout } = useAppContext();
 
   const navItems = [
-    { href: "/listings", label: "All Listings", icon: List },
+    { href: "/ideas", label: "All Ideas", icon: List },
     { href: "/about", label: "About", icon: Info },
   ];
 
@@ -88,9 +88,9 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {user?.email ? (
             <>
-              {user?.role === "seller" && (
+              {user?.role === "MEMBER" && (
                 <Link
-                  href="/dashboard/seller/create-listing"
+                  href="/dashboard/member/manage-idea"
                   className="hidden sm:flex items-center gap-2 
                     bg-primary/10 text-primary 
                     hover:bg-primary/20 
@@ -99,7 +99,7 @@ export default function Navbar() {
                     transition-colors"
                 >
                   <PlusCircle className="w-5 h-5" />
-                  Post Rental
+                  Post Idea
                 </Link>
               )}
 
@@ -113,7 +113,7 @@ export default function Navbar() {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel className="flex items-center gap-3">
                     <User className="w-5 h-5 text-muted-foreground" />
-                    My Account
+                    {user?.name}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -121,23 +121,7 @@ export default function Navbar() {
                       href={`/dashboard/profile`}
                       className="cursor-pointer flex items-center gap-3"
                     >
-                      <User className="w-4 h-4" /> Profile
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/dashboard/profile`}
-                      className="cursor-pointer flex items-center gap-3"
-                    >
                       <Home className="w-4 h-4" /> Dashboard
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/dashboard/settings`}
-                      className="cursor-pointer flex items-center gap-3"
-                    >
-                      <Settings className="w-4 h-4" /> Settings
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

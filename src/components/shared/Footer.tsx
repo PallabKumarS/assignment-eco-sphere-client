@@ -46,11 +46,12 @@ const Footer = () => {
             >
               <Package className="mr-2 text-primary size-9" />
               <h1 className="text-2xl font-black">
-                <span className="text-gradient">Lagbe Kichu</span>
+                <span className="text-gradient">Eco Sphere</span>
               </h1>
             </div>
             <p className="text-muted-foreground">
-              Your trusted partner in finding the perfect products.
+              EcoSphere is a platform dedicated to promoting sustainable ideas
+              and eco-friendly practices.
             </p>
           </div>
 
@@ -70,10 +71,10 @@ const Footer = () => {
               ))}
               <li>
                 <Link
-                  href="/dashboard/seller/create-listing"
+                  href="/dashboard/member/manage-idea"
                   className="text-muted-foreground hover:text-primary hover:underline decoration-primary decoration-2 underline-offset-4 transition-all"
                 >
-                  Sell Your Product
+                  Add Your Idea
                 </Link>
               </li>
             </ul>
@@ -132,7 +133,7 @@ const Footer = () => {
         <div className="mt-16 pt-8 border-t">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Lagbe Kichu. All rights reserved.
+              © {new Date().getFullYear()} Eco Sphere. All rights reserved.
             </div>
             <ul className="flex flex-wrap gap-4 md:justify-end">
               {legalLinks.map((link) => (

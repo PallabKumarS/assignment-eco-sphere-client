@@ -5,88 +5,86 @@
 
 :root {
   /* Main Background and Text */
-  --background: hsl(210, 10%, 96%); /* Softer, lighter off-white */
-  --foreground: hsl(220, 10%, 25%); /* Slightly lighter charcoal */
+  --background: hsl(0, 0%, 98%); /* Softer, lighter off-white */
+  --foreground: hsl(0, 0%, 20%); /* Slightly lighter charcoal */
 
   /* Card and Surface Colors */
-  --card: hsl(210, 10%, 93%); /* Soft silver-gray */
-  --card-foreground: hsl(220, 10%, 30%); /* Muted charcoal */
+  --card: hsl(0, 0%, 95%); /* Soft silver-gray */
+  --card-foreground: hsl(0, 0%, 25%); /* Muted charcoal */
 
   /* Primary Color (Main Brand Color) */
-  --primary: hsl(215, 70%, 60%); /* Softer, brighter blue */
+  --primary: hsl(0, 0%, 60%); /* Soft silver */
   --primary-foreground: hsl(0, 0%, 100%); /* Pure white */
 
   /* Secondary Color */
-  --secondary: hsl(260, 50%, 70%); /* Muted, softer purple */
+  --secondary: hsl(0, 0%, 70%); /* Muted, soft gray */
   --secondary-foreground: hsl(0, 0%, 100%); /* Pure white */
 
   /* Accent Colors */
-  --accent: hsl(170, 60%, 50%); /* Subdued teal */
+  --accent: hsl(0, 0%, 65%); /* Subtle light gray */
   --accent-foreground: hsl(0, 0%, 100%); /* Pure white */
 
   /* Muted Colors */
-  --muted: hsl(210, 10%, 88%); /* Light silver-gray */
-  --muted-foreground: hsl(220, 10%, 45%); /* Soft gray */
+  --muted: hsl(0, 0%, 88%); /* Light silver-gray */
+  --muted-foreground: hsl(0, 0%, 40%); /* Soft gray */
 
   /* Destructive (Error) Colors */
-  --destructive: hsl(350, 60%, 55%); /* Softer red */
+  --destructive: hsl(0, 0%, 50%); /* Soft medium gray */
   --destructive-foreground: hsl(0, 0%, 100%); /* Pure white */
 
   /* Border and Input Colors */
-  --border: hsl(210, 10%, 80%); /* Lighter silver-gray */
-  --input: hsl(210, 10%, 85%); /* Soft silver */
-  --ring: hsl(215, 70%, 60%); /* Matching primary */
+  --border: hsl(0, 0%, 80%); /* Lighter silver-gray */
+  --input: hsl(0, 0%, 85%); /* Soft silver */
+  --ring: hsl(0, 0%, 60%); /* Matching primary */
 
   /* Additional Chart and Visualization Colors */
-  --chart-1: hsl(210, 10%, 90%); /* Very soft silver */
-  --chart-2: hsl(170, 60%, 50%); /* Subdued teal */
-  --chart-3: hsl(215, 70%, 60%); /* Softer blue */
-  --chart-4: hsl(260, 50%, 70%); /* Muted purple */
+  --chart-1: hsl(0, 0%, 90%); /* Very soft silver */
+  --chart-2: hsl(0, 0%, 65%); /* Light gray */
+  --chart-3: hsl(0, 0%, 60%); /* Soft silver */
+  --chart-4: hsl(0, 0%, 70%); /* Muted light gray */
 
   /* Sidebar Colors */
-  --sidebar: hsl(210, 10%, 93%); /* Soft silver-gray */
-  --sidebar-foreground: hsl(220, 10%, 30%); /* Muted charcoal */
-  --sidebar-accent: hsl(215, 70%, 60%); /* Softer blue */
+  --sidebar: hsl(0, 0%, 95%); /* Soft silver-gray */
+  --sidebar-foreground: hsl(0, 0%, 25%); /* Muted charcoal */
+  --sidebar-accent: hsl(0, 0%, 60%); /* Soft silver */
 }
 
 .dark {
   /* Dark Mode Variant */
-  --background: hsl(220, 10%, 12%); /* Deep, muted charcoal */
-  --foreground: hsl(210, 10%, 85%); /* Soft light gray */
+  --background: hsl(0, 0%, 10%); /* Deep, muted charcoal */
+  --foreground: hsl(0, 0%, 85%); /* Soft light gray */
 
-  --card: hsl(220, 10%, 17%); /* Slightly lighter dark charcoal */
-  --card-foreground: hsl(210, 10%, 80%); /* Soft gray */
+  --card: hsl(0, 0%, 15%); /* Slightly lighter dark charcoal */
+  --card-foreground: hsl(0, 0%, 75%); /* Soft gray */
 
-  --primary: hsl(215, 70%, 55%); /* Deeper blue */
+  --primary: hsl(0, 0%, 40%); /* Deep gray */
   --primary-foreground: hsl(0, 0%, 100%); /* Pure white */
 
-  --secondary: hsl(260, 50%, 65%); /* Darker purple */
+  --secondary: hsl(0, 0%, 50%); /* Darker gray */
   --secondary-foreground: hsl(0, 0%, 100%); /* Pure white */
 
-  --accent: hsl(170, 60%, 45%); /* Darker teal */
+  --accent: hsl(0, 0%, 45%); /* Slightly soft gray */
   --accent-foreground: hsl(0, 0%, 100%); /* Pure white */
 
-  --muted: hsl(220, 10%, 22%); /* Dark gray */
-  --muted-foreground: hsl(210, 10%, 65%); /* Soft light gray */
+  --muted: hsl(0, 0%, 22%); /* Dark gray */
+  --muted-foreground: hsl(0, 0%, 60%); /* Soft light gray */
 
-  --destructive: hsl(350, 60%, 50%); /* Deeper red */
+  --destructive: hsl(0, 0%, 35%); /* Deeper gray */
   --destructive-foreground: hsl(0, 0%, 100%); /* Pure white */
 
-  --border: hsl(220, 10%, 25%); /* Dark gray */
-  --input: hsl(220, 10%, 20%); /* Darker gray */
-  --ring: hsl(215, 70%, 55%); /* Deeper blue */
+  --border: hsl(0, 0%, 25%); /* Dark gray */
+  --input: hsl(0, 0%, 20%); /* Darker gray */
+  --ring: hsl(0, 0%, 40%); /* Deeper gray */
 
-  --chart-1: hsl(220, 10%, 35%); /* Muted gray */
-  --chart-2: hsl(170, 60%, 45%); /* Darker teal */
-  --chart-3: hsl(215, 70%, 55%); /* Deeper blue */
-  --chart-4: hsl(260, 50%, 65%); /* Darker purple */
+  --chart-1: hsl(0, 0%, 30%); /* Muted gray */
+  --chart-2: hsl(0, 0%, 45%); /* Medium gray */
+  --chart-3: hsl(0, 0%, 40%); /* Deep gray */
+  --chart-4: hsl(0, 0%, 50%); /* Darker silver-gray */
 
-  --sidebar: hsl(220, 10%, 17%); /* Dark charcoal */
-  --sidebar-foreground: hsl(210, 10%, 85%); /* Soft light gray */
-  --sidebar-accent: hsl(215, 70%, 55%); /* Deeper blue */
+  --sidebar: hsl(0, 0%, 15%); /* Dark charcoal */
+  --sidebar-foreground: hsl(0, 0%, 85%); /* Soft light gray */
+  --sidebar-accent: hsl(0, 0%, 40%); /* Deeper gray */
 }
-
-/* Rest of the file remains the same */
 
 
 @theme inline {
