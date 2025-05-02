@@ -10,9 +10,11 @@ import {
   FileSearch,
   ChevronRight,
   ChevronDown,
-  FilePenLineIcon,
   LightbulbIcon,
   Lightbulb,
+  UserCheck,
+  UserLockIcon,
+  Settings2Icon,
 } from "lucide-react";
 
 import {
@@ -79,12 +81,7 @@ const memberRoutes = [
   {
     title: "Track Ideas",
     icon: TrainTrack,
-    href: "/dashboard/buyer/track",
-  },
-  {
-    title: "Reviews",
-    icon: FilePenLineIcon,
-    href: "/dashboard/buyer/reviews",
+    href: "/dashboard/member/manage-idea",
   },
 ];
 
@@ -172,8 +169,12 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* User Profile */}
+        {/* User Panel */}
         <SidebarGroup>
+          <SidebarGroupLabel className="flex items-center gap-2">
+            <Settings2Icon className="w-4 h-4 text-muted-foreground" />
+            Quick Access
+          </SidebarGroupLabel>
           <SidebarGroupContent>{renderMenuItems(items)}</SidebarGroupContent>
         </SidebarGroup>
 
@@ -181,7 +182,7 @@ export function AppSidebar() {
         {user?.role === "ADMIN" && (
           <SidebarGroup>
             <SidebarGroupLabel className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-muted-foreground" />
+              <UserLockIcon className="w-4 h-4 text-muted-foreground" />
               Admin Panel
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -194,7 +195,7 @@ export function AppSidebar() {
         {user?.role === "MEMBER" && (
           <SidebarGroup>
             <SidebarGroupLabel className="flex items-center gap-2">
-              <TrainTrack className="w-4 h-4 text-muted-foreground" />
+              <UserCheck className="w-4 h-4 text-muted-foreground" />
               Member
             </SidebarGroupLabel>
             <SidebarGroupContent>

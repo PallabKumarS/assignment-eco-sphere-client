@@ -6,8 +6,8 @@ type Role = keyof typeof roleBasedPrivateRoutes;
 const authRoutes = ["/login"];
 
 const roleBasedPrivateRoutes = {
-  admin: [/^\/dashboard\/admin/],
-  member: [/^\/dashboard\/member/],
+  ADMIN: [/^\/dashboard\/admin/],
+  MEMBER: [/^\/dashboard\/member/],
 };
 
 const sharedRoutes = [/^\/dashboard\/settings/, /^\/dashboard\/profile/];
