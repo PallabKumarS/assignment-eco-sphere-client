@@ -11,7 +11,7 @@ import {
   Info,
   PlusCircle,
   User,
-  Settings,
+  TextIcon,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -38,6 +38,7 @@ export default function Navbar() {
   const navItems = [
     { href: "/ideas", label: "All Ideas", icon: List },
     { href: "/about", label: "About", icon: Info },
+    { href: "/blog", label: "Blog", icon: TextIcon },
   ];
 
   const handleLogout = () => {
