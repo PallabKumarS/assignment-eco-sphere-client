@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { setAccessToken } from "@/services/AuthService";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 
@@ -25,7 +26,7 @@ export const getValidToken = async (): Promise<string> => {
   if (!token || (await isTokenExpired(token))) {
     const { data } = await getNewToken();
     token = data?.accessToken;
-    cookieStore.set("accessToken", token);
+    setAccessToken(token);
   }
 
   return token;
