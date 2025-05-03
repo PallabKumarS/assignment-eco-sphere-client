@@ -164,7 +164,7 @@ export const deleteUser = async (id: string): Promise<any> => {
     revalidateTag("user");
     revalidateTag("me");
 
-    return res.json();
+    return await res.json();
   } catch (error: any) {
     return Error(error);
   }

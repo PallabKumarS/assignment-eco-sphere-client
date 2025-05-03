@@ -1,3 +1,4 @@
+import CategoryManagement from "@/components/modules/admin/CategoryManagement";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,12 +6,14 @@ export const metadata: Metadata = {
   description: "Manage Categories in the Dashboard for Admin",
 };
 
-const page = () => {
-  return (
-    <div>
-      <h1>This is page Component</h1>
-    </div>
-  );
+const page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, unknown>>;
+}) => {
+  const query = await searchParams;
+
+  return <CategoryManagement query={query} />;
 };
 
 export default page;

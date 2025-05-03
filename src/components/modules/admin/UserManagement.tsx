@@ -9,12 +9,13 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { LucideArrowDownSquare } from "lucide-react";
+import { LucideArrowDownSquare, Trash2 } from "lucide-react";
 import { TMeta, TUser } from "@/types";
 import { ManagementTable } from "@/components/shared/ManagementTable";
 import ConfirmationBox from "@/components/shared/ConfirmationBox";
 import { toast } from "sonner";
 import {
+  deleteUser,
   getAllUsers,
   updateUserRole,
   updateUserStatus,
@@ -23,11 +24,7 @@ import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
 import { PaginationComponent } from "@/components/shared/Pagination";
 
-const UserManagement = ({
-  query,
-}: {
-  query: { [key: string]: string | string[] | undefined };
-}) => {
+const UserManagement = ({ query }: { query: Record<string, unknown> }) => {
   const [users, setUsers] = useState<TUser[]>([]);
   const [meta, setMeta] = useState<TMeta>();
   const [isFetching, setIsFetching] = useState(true);
@@ -88,6 +85,28 @@ const UserManagement = ({
       }
     } catch (error: any) {
       toast.error("Error changing user role", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  const handleUserDelete = async (id: string) => {
+    const toastId = toast.loading("Deleting user...");
+
+    try {
+      const res = await deleteUser(id);
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error deleting user", {
         id: toastId,
       });
       console.log(error);
@@ -175,10 +194,10 @@ const UserManagement = ({
           <ConfirmationBox
             trigger={
               <Button variant="destructive" size="sm">
-                Delete
+                <Trash2 className="h-4 w-4" />
               </Button>
             }
-            onConfirm={() => console.log("Delete user", user.id)}
+            onConfirm={() => handleUserDelete(user.id)}
           />
         );
       },
@@ -186,7 +205,7 @@ const UserManagement = ({
   ];
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="space-y-7">
       <h1 className="text-center bold text-3xl">User Management Table</h1>
       <ManagementTable data={users} columns={columns} />
 

@@ -42,7 +42,7 @@ const getNewToken = async () => {
       },
     });
 
-    return res.json();
+    return await res.json();
   } catch (error: any) {
     return Error(error);
   }

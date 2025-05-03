@@ -82,7 +82,7 @@ export const create${capitalize(
 
     revalidateTag("${moduleName}s");
 
-    return res.json();
+    return await res.json();
   } catch (error: any) {
     throw new Error(error.message || "Something went wrong");
   }
@@ -103,7 +103,7 @@ export const delete${capitalize(
     });
 
     revalidateTag("${moduleName}s");
-    return res.json();
+    return await res.json();
   } catch (error: any) {
     return Error(error);
   }
