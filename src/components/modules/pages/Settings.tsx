@@ -1,14 +1,13 @@
 "use client";
 
-import { userSelector } from "@/redux/features/authSlice";
-import { useAppSelector } from "@/redux/hook";
 import { Card } from "@/components/ui/card";
 import { UserCog, Lock } from "lucide-react";
 import ProfileForm from "@/components/forms/ProfileForm";
 import PasswordForm from "@/components/forms/PasswordForm";
+import { useAppContext } from "@/providers/ContextProvider";
 
 const Settings = () => {
-  const user = useAppSelector(userSelector);
+  const { user } = useAppContext();
 
   return (
     <div className="container mx-auto py-8 px-4">

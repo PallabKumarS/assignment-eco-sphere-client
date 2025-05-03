@@ -16,18 +16,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 // import { LoaderCircleIcon } from "lucide-react";
 import { TUser } from "@/types";
-import { useAppDispatch } from "@/redux/hook";
-import { setUser } from "@/redux/features/authSlice";
-import { useUpdateUserMutation } from "@/redux/api/userApi";
 import { DragDropUploader } from "../shared/DragDropUploader";
 import ButtonLoader from "../shared/ButtonLoader";
+import { updateUser } from "@/services/UserService";
+import { useAppContext } from "@/providers/ContextProvider";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string(),
   email: z.string(),
-  phone: z.string(),
+  contactNumber: z.string(),
   address: z.string(),
-  profileImage: z.string(),
+  profilePhoto: z.string(),
 });
 
 export default function ProfileForm({
@@ -35,38 +35,39 @@ export default function ProfileForm({
 }: {
   userData: Partial<TUser> | null;
 }) {
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setUser } = useAppContext();
 
-  const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: userData?.name || "",
       email: userData?.email || "",
-      phone: userData?.phone || "",
+      contactNumber: userData?.contactNumber || "",
       address: userData?.address || "",
-      profileImage: userData?.profileImage || "",
+      profilePhoto: userData?.profilePhoto || "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const toastId = toast.loading("Updating user...");
+    setIsLoading(true);
 
     try {
-      const res = await updateUser({
-        userId: userData?.userId as string,
-        data: values,
-      }).unwrap();
+      const res = await updateUser(userData?.id as string, values);
 
       if (res?.success) {
         toast.success(res?.message, { id: toastId });
-        dispatch(setUser(res?.data));
+        setUser(res?.data);
+        setIsLoading(false);
       } else {
         toast.error(res?.message, { id: toastId });
+        setIsLoading(false);
       }
     } catch (error: any) {
       console.error("Form submission error", error);
       toast.error(error.data.message, { id: toastId });
+      setIsLoading(false);
     }
   }
 
@@ -110,7 +111,7 @@ export default function ProfileForm({
         {/* phone field  */}
         <FormField
           control={form.control}
-          name="phone"
+          name="contactNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Phone No.</FormLabel>
@@ -150,7 +151,7 @@ export default function ProfileForm({
         {/* profile image field  */}
         <FormField
           control={form.control}
-          name="profileImage"
+          name="profilePhoto"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Profile Image</FormLabel>
