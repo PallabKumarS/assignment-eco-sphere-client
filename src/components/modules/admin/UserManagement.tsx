@@ -1,0 +1,198 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { LucideArrowDownSquare } from "lucide-react";
+import { TMeta, TUser } from "@/types";
+import { ManagementTable } from "@/components/shared/ManagementTable";
+import ConfirmationBox from "@/components/shared/ConfirmationBox";
+import { toast } from "sonner";
+import {
+  getAllUsers,
+  updateUserRole,
+  updateUserStatus,
+} from "@/services/UserService";
+import { useEffect, useState } from "react";
+import LoadingData from "@/components/shared/LoadingData";
+import { PaginationComponent } from "@/components/shared/Pagination";
+
+const UserManagement = ({
+  query,
+}: {
+  query: { [key: string]: string | string[] | undefined };
+}) => {
+  const [users, setUsers] = useState<TUser[]>([]);
+  const [meta, setMeta] = useState<TMeta>();
+  const [isFetching, setIsFetching] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await getAllUsers(query);
+      setUsers(res?.data);
+      setMeta(res?.meta);
+    };
+
+    fetchUsers();
+    setIsFetching(false);
+  }, [query]);
+
+  if (isFetching) return <LoadingData />;
+
+  // user manage actions
+  const handleUserStatusChange = async (
+    id: string,
+    status: TUser["status"]
+  ) => {
+    const toastId = toast.loading("Changing user status...");
+
+    try {
+      const res = await updateUserStatus(id, status);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message as string, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error changing user status", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  const handleUserRoleChange = async (id: string, role: TUser["role"]) => {
+    const toastId = toast.loading("Changing user role...");
+    try {
+      const res = await updateUserRole(id, role);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error changing user role", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  // column definition
+  const columns: ColumnDef<TUser>[] = [
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = row.getValue("status") as TUser["status"];
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="capitalize">
+                {status} <LucideArrowDownSquare className="ml-2 h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-background/80">
+              {["ACTIVE", "BLOCKED", "DELETED"].map((s) => (
+                <DropdownMenuItem
+                  key={s}
+                  onSelect={() =>
+                    handleUserStatusChange(
+                      row.original.id,
+                      s as TUser["status"]
+                    )
+                  }
+                >
+                  {s}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: ({ row }) => {
+        const role = row.getValue("role") as TUser["role"];
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="">
+              <Button variant="outline" size="sm" className="capitalize">
+                {role} <LucideArrowDownSquare className="ml-2 h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-background/80">
+              {["ADMIN", "MEMBER"].map((r) => (
+                <DropdownMenuItem
+                  key={r}
+                  onSelect={() =>
+                    handleUserRoleChange(row.original.id, r as TUser["role"])
+                  }
+                >
+                  {r}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const user = row.original;
+
+        return (
+          <ConfirmationBox
+            trigger={
+              <Button variant="destructive" size="sm">
+                Delete
+              </Button>
+            }
+            onConfirm={() => console.log("Delete user", user.id)}
+          />
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className="flex flex-col gap-8">
+      <h1 className="text-center bold text-3xl">User Management Table</h1>
+      <ManagementTable data={users} columns={columns} />
+
+      <PaginationComponent meta={meta} />
+    </div>
+  );
+};
+
+export default UserManagement;

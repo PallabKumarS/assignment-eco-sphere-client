@@ -6,7 +6,7 @@ import { revalidateTag } from "next/cache";
 import { FieldValues } from "react-hook-form";
 
 // Get all ideas
-export const getAllIdeas = async (query: Record<string, unknown>) => {
+export const getAllIdeas = async (query?: Record<string, unknown>) => {
   const queryString = new URLSearchParams(
     query as Record<string, string>
   ).toString();
