@@ -20,7 +20,6 @@ const IdeaPage = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchIdeasAndCategories = async () => {
@@ -58,47 +57,10 @@ const IdeaPage = () => {
     fetchIdeasAndCategories();
   }, []);
 
-  const handleCreateIdea = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      title: formData.get('title'),
-      problem: formData.get('problem'),
-      solution: formData.get('solution'),
-      description: formData.get('description'),
-      images: (formData.get('images') as string).split(','),
-      isPaid: formData.get('isPaid') === 'on',
-      price: parseFloat(formData.get('price') as string),
-      categories: Array.from(formData.getAll('categories')),
-    };
-
-    const token = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('accessToken='))
-      ?.split('=')[1];
-
-    const res = await fetch('http://localhost:5000/api/ideas', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (res.ok) {
-      const newIdea = await res.json();
-      setIdeas((prev) => [...prev, newIdea.data]);
-      setShowModal(false);
-    }
-  };
-
   const getCategoryNamesFromIdea = (ids: Category[]) => {
     return ids.map((cat) => cat.name).join(', ');
   };
-  const handleEdit = (id: any) => {
-    console.log(id);
-  }
+  const handleEdit = (id: any) => {}
   const handleDelete = (id: string) => {}
 
   if (loading) return <p className="text-center mt-8">Loading ideas...</p>;
