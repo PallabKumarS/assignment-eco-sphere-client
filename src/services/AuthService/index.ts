@@ -33,7 +33,7 @@ export const loginUser = async (data: { email: string; password: string }) => {
 
     const resData = await res.json();
 
-    setCookies(resData?.data?.accessToken, resData?.data?.refreshToken);
+    await setCookies(resData?.data?.accessToken, resData?.data?.refreshToken);
 
     return resData;
   } catch (error) {
