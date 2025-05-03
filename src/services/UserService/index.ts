@@ -3,9 +3,12 @@
 
 import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
+import { FieldValues } from "react-hook-form";
 
 // Get all users
-export const getAllUsers = async (query: Record<string, unknown>) => {
+export const getAllUsers = async (
+  query?: Record<string, unknown>
+): Promise<any> => {
   const queryString = new URLSearchParams(
     query as Record<string, string>
   ).toString();
@@ -26,7 +29,7 @@ export const getAllUsers = async (query: Record<string, unknown>) => {
 };
 
 // Get single user
-export const getSingleUser = async (id: string) => {
+export const getSingleUser = async (id: string): Promise<any> => {
   const token = await getValidToken();
   try {
     const res = await fetch(`${process.env.BASE_API}/users/${id}`, {
@@ -43,31 +46,15 @@ export const getSingleUser = async (id: string) => {
   }
 };
 
-// Delete user
-export const deleteUser = async (userId: string): Promise<any> => {
-  const token = await getValidToken();
-
-  try {
-    const res = await fetch(`${process.env.BASE_API}/users/${userId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    revalidateTag("users");
-    return res.json();
-  } catch (error: any) {
-    return Error(error);
-  }
-};
-
 // get personal info
-export const getMe = async () => {
+export const getMe = async (): Promise<any> => {
   const token = await getValidToken();
 
   try {
     const res = await fetch(`${process.env.BASE_API}/users/me`, {
+      next: {
+        tags: ["me"],
+      },
       headers: {
         "content-type": "application/json",
         Authorization: token,
@@ -77,5 +64,108 @@ export const getMe = async () => {
     return await res.json();
   } catch (error: any) {
     return error;
+  }
+};
+
+// update user
+export const updateUser = async (
+  id: string,
+  data: FieldValues
+): Promise<any> => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(`${process.env.BASE_API}/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify(data),
+    });
+
+    revalidateTag("users");
+    revalidateTag("user");
+    revalidateTag("me");
+
+    return await res.json();
+  } catch (error: any) {
+    return error;
+  }
+};
+
+// update user status
+export const updateUserStatus = async (
+  id: string,
+  status: string
+): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.BASE_API}/users/${id}/status`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: token,
+      },
+
+      body: JSON.stringify({ status }),
+    });
+
+    revalidateTag("users");
+    revalidateTag("user");
+    revalidateTag("me");
+
+    return await res.json();
+  } catch (error: any) {
+    return error;
+  }
+};
+
+// update user role
+export const updateUserRole = async (
+  id: string,
+  role: string
+): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.BASE_API}/users/${id}/role`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({ role }),
+    });
+
+    revalidateTag("users");
+    revalidateTag("user");
+    revalidateTag("me");
+
+    return await res.json();
+  } catch (error: any) {
+    return error;
+  }
+};
+
+// Delete user
+export const deleteUser = async (id: string): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.BASE_API}/users/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    revalidateTag("users");
+    revalidateTag("user");
+    revalidateTag("me");
+
+    return res.json();
+  } catch (error: any) {
+    return Error(error);
   }
 };

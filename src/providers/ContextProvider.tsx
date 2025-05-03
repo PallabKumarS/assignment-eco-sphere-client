@@ -1,3 +1,5 @@
+"use client";
+
 import Loading from "@/app/loading";
 import { getToken } from "@/lib/verifyToken";
 import { deleteCookie } from "@/services/AuthService";

@@ -15,6 +15,7 @@ import {
 import { PasswordInput } from "../ui/password-input";
 import { useState } from "react";
 import ButtonLoader from "../shared/ButtonLoader";
+import { passwordChange } from "@/services/AuthService";
 
 const formSchema = z.object({
   oldPassword: z.string().min(1),

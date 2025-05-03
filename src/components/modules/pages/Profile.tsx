@@ -15,11 +15,28 @@ import {
 import Link from "next/link";
 import { TUser } from "@/types";
 import { useAppContext } from "@/providers/ContextProvider";
+import { useEffect, useState } from "react";
+import { getMe } from "@/services/UserService";
+import LoadingData from "@/components/shared/LoadingData";
 
-const Profile = ({ user }: { user: TUser }) => {
-  const { setUser } = useAppContext();
+const Profile = () => {
+  const { setUser: setUserData } = useAppContext();
+  const [user, setUser] = useState<TUser>();
+  const [isFetching, setIsFetching] = useState(true);
 
-  setUser(user);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await getMe();
+      setUserData(res?.data);
+      setUser(res?.data);
+    };
+
+    fetchUsers();
+    setIsFetching(false);
+  }, [setUserData]);
+
+
+  if (isFetching) return <LoadingData />;
 
   return (
     <div className="container mx-auto py-8 px-4">

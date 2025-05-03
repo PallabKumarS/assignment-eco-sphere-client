@@ -1,6 +1,4 @@
 import Profile from "@/components/modules/pages/Profile";
-import LoadingData from "@/components/shared/LoadingData";
-import { getMe } from "@/services/UserService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,11 +7,7 @@ export const metadata: Metadata = {
 };
 
 const page = async () => {
-  const user = await getMe();
-
-  if (!user?.data) return <LoadingData />;
-
-  return <Profile user={user?.data} />;
+  return <Profile />;
 };
 
 export default page;

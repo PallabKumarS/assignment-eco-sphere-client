@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ReactNode } from "react";
 
-type IPropConfirmationBox = {
+type TPropConfirmationBox = {
   description?: string;
   title?: string;
   trigger: ReactNode | string;
@@ -23,10 +23,12 @@ export default function ConfirmationBox({
   title,
   trigger,
   onConfirm,
-}: IPropConfirmationBox) {
+}: TPropConfirmationBox) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="w-full">{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger className="" asChild>
+        {trigger}
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
