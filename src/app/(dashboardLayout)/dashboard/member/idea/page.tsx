@@ -1,9 +1,9 @@
-import Homepage from "@/components/modules/pages/Homepage";
+import IdeaManagement from "@/components/modules/member/IdeaManagement";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Homepage | Manage Ideas",
-  description: "Manage Ideas in the Idea Hub",
+  title: "Dashboard | Manage Ideas",
+  description: "Manage Ideas in the Dashboard for Member",
 };
 
 const page = async ({
@@ -13,7 +13,7 @@ const page = async ({
 }) => {
   const query = await searchParams;
 
-  return <Homepage query={query} />;
+  return <IdeaManagement query={query} />;
 };
 
 export default page;

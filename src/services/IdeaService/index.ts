@@ -10,14 +10,18 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
   const queryString = new URLSearchParams(
     query as Record<string, string>
   ).toString();
+  const token = await getValidToken();
 
   try {
     const res = await fetch(`${process.env.BASE_API}/ideas?${queryString}`, {
       next: {
         tags: ["ideas"],
       },
+      headers: {
+        Authorization: token,
+      },
     });
-    return await res.json();
+    return await res.json();    
   } catch (error: any) {
     return Error(error.message);
   }
@@ -27,8 +31,7 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
 export const getSingleIdea = async (ideaId: string) => {
   const token = await getValidToken();
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/ideas/${ideaId}`,
+    const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`,
       {
         next: {
           tags: ["idea"],

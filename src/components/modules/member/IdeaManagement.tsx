@@ -1,0 +1,231 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { LucideArrowDownSquare, Trash2 } from "lucide-react";
+import { TIdea, TMeta, TUser } from "@/types";
+import { ManagementTable } from "@/components/shared/ManagementTable";
+import ConfirmationBox from "@/components/shared/ConfirmationBox";
+import { toast } from "sonner";
+import {
+  deleteUser,
+  updateUserRole,
+  updateUserStatus,
+} from "@/services/UserService";
+import { useEffect, useState } from "react";
+import LoadingData from "@/components/shared/LoadingData";
+import { PaginationComponent } from "@/components/shared/Pagination";
+import { getAllIdeas } from "@/services/IdeaService";
+
+const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
+  const [ideas, setIdeas] = useState<TIdea[]>([]);
+  const [meta, setMeta] = useState<TMeta>();
+  const [isFetching, setIsFetching] = useState(true);
+
+  useEffect(() => {
+    const fetchIdeas = async () => {
+      const res = await getAllIdeas(query);
+      setIdeas(res?.data);
+      setMeta(res?.meta);
+    };
+
+    fetchIdeas();
+    setIsFetching(false);
+  }, [query]);
+
+  console.log({ideas});
+
+  if (isFetching) return <LoadingData />;
+
+  // user manage actions
+  const handleUserStatusChange = async (
+    id: string,
+    status: TUser["status"]
+  ) => {
+    const toastId = toast.loading("Changing user status...");
+
+    try {
+      const res = await updateUserStatus(id, status);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message as string, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error changing user status", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  const handleUserRoleChange = async (id: string, role: TUser["role"]) => {
+    const toastId = toast.loading("Changing user role...");
+    try {
+      const res = await updateUserRole(id, role);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error changing user role", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  const handleUserDelete = async (id: string) => {
+    const toastId = toast.loading("Deleting user...");
+
+    try {
+      const res = await deleteUser(id);
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error("Error deleting user", {
+        id: toastId,
+      });
+      console.log(error);
+    }
+  };
+
+  // column definition
+  const columns: ColumnDef<TUser>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+    },
+    {
+      accessorKey: "problem",
+      header: "Problem",
+    },
+    // {
+    //   accessorKey: "solution",
+    //   header: "Solution",
+    // },
+    // {
+    //   accessorKey: "description",
+    //   header: "Description",
+    // },
+    {
+      accessorKey: "price",
+      header: "Price",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = row.getValue("status") as TUser["status"];
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="capitalize">
+                {status} <LucideArrowDownSquare className="ml-2 h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-background/80">
+              {["DRAFT", "PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED"].map((s) => (
+                <DropdownMenuItem
+                  key={s}
+                  onSelect={() =>
+                    handleUserStatusChange(
+                      row.original.id,
+                      s as TUser["status"]
+                    )
+                  }
+                >
+                  {s}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: ({ row }) => {
+        const role = row.getValue("role") as TUser["role"];
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild className="">
+              <Button variant="outline" size="sm" className="capitalize">
+                {role} <LucideArrowDownSquare className="ml-2 h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-background/80">
+              {["ADMIN", "MEMBER"].map((r) => (
+                <DropdownMenuItem
+                  key={r}
+                  onSelect={() =>
+                    handleUserRoleChange(row.original.id, r as TUser["role"])
+                  }
+                >
+                  {r}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const user = row.original;
+
+        return (
+          <ConfirmationBox
+            trigger={
+              <Button variant="destructive" size="sm">
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            }
+            onConfirm={() => handleUserDelete(user.id)}
+          />
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className="space-y-7">
+      <h1 className="text-center bold text-3xl">Idea Management Table</h1>
+      <ManagementTable data={ideas} columns={columns} />
+
+      <PaginationComponent meta={meta} />
+    </div>
+  );
+};
+
+export default IdeaManagement;
