@@ -6,14 +6,17 @@ import LoadingData from "@/components/shared/LoadingData";
 import { getSingleIdea } from "@/services/IdeaService";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 import { voteIdea } from "@/services/VoteService";
+import { commentIdea } from "@/services/CommentService";
 
 const SingleIdea = () => {
   const [idea, setIdea] = useState<TIdea>();
   const [isFetching, setIsFetching] = useState(true);
   const {ideaId} = useParams();
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
     const fetchIdea = async () => {
@@ -45,6 +48,30 @@ const SingleIdea = () => {
       console.error(error);
     }
   }
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const toastId = toast.loading("Commenting idea...");
+    setCommentText("");
+    setIsCommentModalOpen(false);
+
+    try {
+      const res = await commentIdea(ideaId as string, commentText)
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error);
+    }    
+  };
 
   if (isFetching) return <LoadingData />;
 
@@ -89,7 +116,10 @@ const SingleIdea = () => {
                       <ThumbsDown className="w-5 h-5 mr-1" />
                       <span>Downvote</span>
                     </button>
-                    <button className="flex items-center hover:text-blue-600">
+                    <button
+                      onClick={() => setIsCommentModalOpen(true)}
+                      className="flex items-center hover:text-blue-600"
+                    >
                       <MessageSquare className="w-5 h-5 mr-1" />
                       <span>Comment</span>
                     </button>
@@ -97,6 +127,36 @@ const SingleIdea = () => {
               </div>
           </div>
         </div>
+      {/* Comment Modal */}
+      {isCommentModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-red-600"
+              onClick={() => setIsCommentModalOpen(false)}
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-lg font-bold mb-4">Add Comment</h3>
+            <form onSubmit={handleCommentSubmit}>
+              <textarea
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                className="w-full border border-gray-300 rounded-lg p-2 mb-4"
+                rows={4}
+                placeholder="Write your comment here..."
+                required
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      )}        
     </div>
   );
 };
