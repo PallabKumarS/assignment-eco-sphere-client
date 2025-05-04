@@ -7,6 +7,8 @@ import { getSingleIdea } from "@/services/IdeaService";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
+import { toast } from "sonner";
+import { voteIdea } from "@/services/VoteService";
 
 const SingleIdea = () => {
   const [idea, setIdea] = useState<TIdea>();
@@ -22,6 +24,27 @@ const SingleIdea = () => {
     fetchIdea();
     setIsFetching(false);
   }, [ideaId]);
+
+  const handleVote = async (ideaId: string, voteType: string) => {
+    const toastId = toast.loading("Upvoting idea...");
+
+    try {
+      const res = await voteIdea(ideaId, voteType);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error);
+    }
+  }
 
   if (isFetching) return <LoadingData />;
 
@@ -58,11 +81,11 @@ const SingleIdea = () => {
                   </p>
                   {/* Icons Section */}
                   <div className="flex items-center space-x-6 mt-4 text-gray-600">
-                    <button className="flex items-center hover:text-green-600">
+                    <button onClick={() => handleVote(idea?.id as string, "UPVOTE")} className="flex items-center hover:text-green-600">
                       <ThumbsUp className="w-5 h-5 mr-1" />
                       <span>Upvote</span>
                     </button>
-                    <button className="flex items-center hover:text-red-600">
+                    <button onClick={() => handleVote(idea?.id as string, "DOWNVOTE")} className="flex items-center hover:text-red-600">
                       <ThumbsDown className="w-5 h-5 mr-1" />
                       <span>Downvote</span>
                     </button>
