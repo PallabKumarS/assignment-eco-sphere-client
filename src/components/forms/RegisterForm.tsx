@@ -18,7 +18,6 @@ import { PasswordInput } from "../ui/password-input";
 import ButtonLoader from "../shared/ButtonLoader";
 import { registerUser } from "@/services/AuthService";
 import { Dispatch, SetStateAction, useState } from "react";
-import { DragDropUploader } from "../shared/DragDropUploader";
 
 const formSchema = z.object({
   name: z.string(),
@@ -132,7 +131,6 @@ export default function RegisterForm({
           )}
         />
 
-        <DragDropUploader name="profilePhoto" />
 
         {/* password field  */}
         <FormField

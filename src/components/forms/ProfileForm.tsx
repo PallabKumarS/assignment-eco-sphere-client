@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "../ui/button";
 // import { LoaderCircleIcon } from "lucide-react";
 import { TUser } from "@/types";
-import { DragDropUploader } from "../shared/DragDropUploader";
 import ButtonLoader from "../shared/ButtonLoader";
 import { updateUser } from "@/services/UserService";
 import { useAppContext } from "@/providers/ContextProvider";
@@ -167,7 +166,6 @@ export default function ProfileForm({
             </FormItem>
           )}
         />
-        <DragDropUploader name="profileImage" />
 
         <Button variant={"outline"} type="submit">
           {isLoading ? <ButtonLoader /> : "Update Profile"}
