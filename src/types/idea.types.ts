@@ -1,3 +1,6 @@
+import { TCategory } from "./category.types";
+import { TVote } from "./vote.types";
+
 export type TIdea = {
   id: string;
   title: string;
@@ -12,6 +15,8 @@ export type TIdea = {
   feedback?: string;
   authorId: string;
   isPaid: boolean;
+  category: TCategory;
+  votes?: TVote[];
 };
 
 export interface IIdea {

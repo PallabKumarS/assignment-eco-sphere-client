@@ -6,7 +6,6 @@ import {
   Users,
   LogIn,
   HomeIcon,
-  TrainTrack,
   FileSearch,
   ChevronRight,
   ChevronDown,
@@ -15,6 +14,7 @@ import {
   UserCheck,
   UserLockIcon,
   Settings2Icon,
+  ColumnsSettings,
 } from "lucide-react";
 
 import {
@@ -79,8 +79,8 @@ const adminRoutes = [
 // buyer routes
 const memberRoutes = [
   {
-    title: "Track Ideas",
-    icon: TrainTrack,
+    title: "Manage Ideas",
+    icon: ColumnsSettings,
     href: "/dashboard/member/manage-idea",
   },
 ];

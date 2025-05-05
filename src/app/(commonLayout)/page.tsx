@@ -1,19 +1,13 @@
-import Homepage from "@/components/modules/pages/Homepage";
+import HomePage from "@/components/modules/home/HomePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Homepage | Manage Ideas",
-  description: "Manage Ideas in the Idea Hub",
+  title: "Home | Eco Sphere",
+  description: "Home page of Eco Sphere",
 };
 
-const page = async ({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) => {
-  const query = await searchParams;
-
-  return <Homepage query={query} />;
+const page = async () => {
+  return <HomePage />;
 };
 
 export default page;

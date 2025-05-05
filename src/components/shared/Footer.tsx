@@ -87,7 +87,7 @@ const Footer = () => {
               <li className="flex items-center space-x-2 text-muted-foreground group cursor-pointer justify-center">
                 <Mail className="w-4 h-4 group-hover:text-primary transition-colors" />
                 <span className="group-hover:text-primary group-hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">
-                  contact@lagbekichu.com
+                  contact@eco-sphere.com
                 </span>
               </li>
               <li className="flex items-center space-x-2 text-muted-foreground group cursor-pointer justify-center">
@@ -99,7 +99,7 @@ const Footer = () => {
               <li className="flex items-center space-x-2 text-muted-foreground group cursor-pointer justify-center">
                 <MapPin className="w-4 h-4 group-hover:text-primary transition-colors" />
                 <span className="group-hover:text-primary group-hover:underline decoration-primary decoration-2 underline-offset-4 transition-all">
-                  123 Innovation Lane, Tech City
+                  123 Green Lane, Eco City
                 </span>
               </li>
             </ul>
@@ -131,22 +131,8 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="mt-16 pt-8 border-t">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Eco Sphere. All rights reserved.
-            </div>
-            <ul className="flex flex-wrap gap-4 md:justify-end">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary hover:underline decoration-primary decoration-2 underline-offset-4 transition-all"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Eco Sphere. All rights reserved.
           </div>
         </div>
       </div>

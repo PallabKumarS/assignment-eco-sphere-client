@@ -24,7 +24,7 @@ const formSchema = z.object({
 });
 
 export default function PasswordForm() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,6 +35,7 @@ export default function PasswordForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const toastId = toast.loading("Updating password...");
+    setIsLoading(true);
     try {
       const res = await passwordChange({
         oldPassword: values.oldPassword,
@@ -46,6 +47,7 @@ export default function PasswordForm() {
         setIsLoading(false);
       } else {
         toast.error(res?.message, { id: toastId });
+        setIsLoading(false);
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

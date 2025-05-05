@@ -1,9 +1,9 @@
-import Homepage from "@/components/modules/pages/Homepage";
+import AllIdeas from "@/components/modules/pages/AllIdeas";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Homepage | Manage Ideas",
-  description: "Manage Ideas in the Idea Hub",
+  description: "Explore Ideas in the Eco Sphere",
 };
 
 const page = async ({
@@ -13,7 +13,7 @@ const page = async ({
 }) => {
   const query = await searchParams;
 
-  return <Homepage query={query} />;
+  return <AllIdeas query={query} />;
 };
 
 export default page;
