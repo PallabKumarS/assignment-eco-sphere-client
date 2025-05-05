@@ -42,7 +42,7 @@ const IdeaCard = ({ idea }: IdeaCardProps) => {
       <div className="p-4">
         <div className="mb-2">
           <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-            {idea.category?.name || "Uncategorized"}
+            {idea.categories.map((category) => category.name).join(", ")}
           </span>
         </div>
         <h3 className="text-xl font-semibold mb-2 line-clamp-1">

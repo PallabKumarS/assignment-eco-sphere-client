@@ -1,3 +1,5 @@
+"use client";
+
 import LoadingData from "@/components/shared/LoadingData";
 import { getAllIdeas } from "@/services/IdeaService";
 import { TIdea, TMeta } from "@/types";

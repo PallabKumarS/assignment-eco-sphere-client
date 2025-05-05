@@ -109,11 +109,11 @@ const Profile = () => {
                 )}
               </div>
             </div>
-            {user?.passWordChangedAt && (
+            {user?.passwordChangedAt && (
               <div className="flex flex-col gap-2">
                 <span className="font-semibold">Password Last Changed</span>
                 <span>
-                  {new Date(user?.passWordChangedAt).toLocaleDateString()}
+                  {new Date(user?.passwordChangedAt).toLocaleDateString()}
                 </span>
               </div>
             )}

@@ -43,7 +43,11 @@ const TestimonialCard = ({ idea }: TestimonialCardProps) => {
         </div>
         <div>
           <h3 className="font-semibold text-lg">{idea.title}</h3>
-          <p className="text-sm text-gray-500">{idea.category?.name}</p>
+          <p className="text-sm text-gray-500">
+            {idea.categories.map((category) => (
+              <span key={category.id}>{category.name}</span>
+            ))}
+          </p>
         </div>
       </div>
       <p className="text-gray-600 mb-4 flex-grow">
