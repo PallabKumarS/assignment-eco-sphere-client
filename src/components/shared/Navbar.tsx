@@ -111,7 +111,10 @@ export default function Navbar() {
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 backdrop-blur-sm bg-background/60"
+                >
                   <DropdownMenuLabel className="flex items-center gap-3">
                     <User className="w-5 h-5 text-muted-foreground" />
                     {user?.name}
@@ -130,7 +133,7 @@ export default function Navbar() {
                     className="text-destructive focus:text-destructive-foreground cursor-pointer flex items-center gap-3"
                     onClick={handleLogout}
                   >
-                    <LogOut className="w-4 h-4" /> Logout
+                    <LogOut className="w-4 h-4 text-destructive" /> Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

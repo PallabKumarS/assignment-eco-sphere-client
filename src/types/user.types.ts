@@ -1,15 +1,35 @@
+import { TComment } from "./comment.types";
+import { TIdea, TPaidIdeaPurchase } from "./idea.types";
+import { VoteType } from "./vote.types";
+
 export type TUser = {
   id: string;
   name: string;
   email: string;
   password: string;
-  role: string;
+  passwordChangedAt?: Date;
+  role: UserRole;
+  profilePhoto?: string;
+  contactNumber?: string;
+  address?: string;
+  isDeleted: boolean;
+  status: UserStatus;
   createdAt: Date;
   updatedAt: Date;
-  isDeleted: boolean;
-  passWordChangedAt: Date | null;
-  profilePhoto: string | null;
-  address: string | null;
-  contactNumber: string | null;
-  status: "ACTIVE" | "BLOCKED" | "DELETED";
+  ideas?: TIdea[];
+  vote?: VoteType[];
+  Comment?: TComment[];
+  PaidIdeaPurchase?: TPaidIdeaPurchase[];
 };
+
+export enum UserStatus {
+  ACTIVE = "ACTIVE",
+  BLOCKED = "BLOCKED",
+  DELETED = "DELETED",
+}
+
+export enum UserRole {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  MEMBER = "MEMBER",
+}

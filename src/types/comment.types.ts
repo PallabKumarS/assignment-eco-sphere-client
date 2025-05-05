@@ -1,16 +1,16 @@
+import { TIdea } from "./idea.types";
+import { TUser } from "./user.types";
+
 export type TComment = {
-  id:       string;
-  content:  string;
-  user: {
-    id: string;
-    name: string;
-  };
-  userId:   string;
-  ideaId:   string;
+  id: string;
+  content: string;
+  userId: string;
+  user: TUser;
+  ideaId: string;
+  idea: TIdea;
   parentId?: string;
-  replies?:  TComment[];
-
-  createdAt: string;
-  updatedAt: string;
-}
-
+  parent?: Comment;
+  replies: Comment[];
+  createdAt: Date;
+  updatedAt: Date;
+};

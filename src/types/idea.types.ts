@@ -1,4 +1,6 @@
 import { TCategory } from "./category.types";
+import { TComment } from "./comment.types";
+import { TUser } from "./user.types";
 import { TVote } from "./vote.types";
 
 export type TIdea = {
@@ -8,31 +10,32 @@ export type TIdea = {
   solution: string;
   description: string;
   images: string[];
-  price: number;
-  categories: string[];
-  status: TIdeaStatus;
-  comments: string[];
+  status: IdeaStatus;
   feedback?: string;
-  authorId: string;
   isPaid: boolean;
-  category: TCategory;
-  votes?: TVote[];
+  price?: number;
+  categories: TCategory[];
+  authorId: string;
+  users: TUser;
+  votes: TVote[];
+  comments: TComment[];
+  paidIdeaPurchase: TPaidIdeaPurchase[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+export type TPaidIdeaPurchase = {
+  id: string;
+  userId: string;
+  user: TUser;
+  ideaId: string;
+  idea: TIdea;
+  createdAt: Date;
 };
 
-export interface IIdea {
-  title: string;
-  problem: string;
-  solution: string;
-  description: string;
-  images: string[];
-  price: number;
-  categories: string[];
-  isPaid?: boolean;
+export enum IdeaStatus {
+  DRAFT = "DRAFT",
+  PENDING = "PENDING",
+  UNDER_REVIEW = "UNDER_REVIEW",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
-
-type TIdeaStatus =
-  | "DRAFT"
-  | "PENDING"
-  | "UNDER_REVIEW"
-  | "APPROVED"
-  | "REJECTED";
