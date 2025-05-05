@@ -15,15 +15,13 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchIdeas = async () => {
-      const res = await getAllIdeas();
+      const res = await getAllIdeas({ status: "APPROVED", isDeleted: false });
       setIdeas(res?.data);
     };
 
     fetchIdeas();
     setIsFetching(false);
   }, []);
-
-  console.log(ideas);
 
   return (
     <Container>

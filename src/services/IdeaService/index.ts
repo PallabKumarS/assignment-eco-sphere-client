@@ -21,7 +21,7 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
         Authorization: token,
       },
     });
-    return await res.json();    
+    return await res.json();
   } catch (error: any) {
     return Error(error.message);
   }
@@ -31,16 +31,14 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
 export const getSingleIdea = async (ideaId: string) => {
   const token = await getValidToken();
   try {
-    const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`,
-      {
-        next: {
-          tags: ["idea"],
-        },
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`, {
+      next: {
+        tags: ["idea"],
+      },
+      headers: {
+        Authorization: token,
+      },
+    });
     return await res.json();
   } catch (error: any) {
     return Error(error.message);
