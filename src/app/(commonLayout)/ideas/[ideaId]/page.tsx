@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import { TIdea } from "@/types";
+import { TComment, TIdea } from "@/types";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
 import { getSingleIdea } from "@/services/IdeaService";
@@ -9,7 +9,10 @@ import { useParams } from "next/navigation";
 import { ThumbsUp, ThumbsDown, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 import { voteIdea } from "@/services/VoteService";
-import { commentIdea } from "@/services/CommentService";
+import { commentIdea, deleteComment, getAllComments, replyToComment, updateComment } from "@/services/CommentService";
+import CommentItem from "@/components/shared/CommentItem";
+import { buildCommentTree } from "@/lib/utils";
+import { useAppContext } from "@/providers/ContextProvider";
 
 const SingleIdea = () => {
   const [idea, setIdea] = useState<TIdea>();
@@ -17,16 +20,74 @@ const SingleIdea = () => {
   const {ideaId} = useParams();
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState<TComment[]>([]);
+  const { user } = useAppContext();
+  const currentUserId = user?.id;
 
+  const fetchComments = async () => {
+    const res = await getAllComments(ideaId as string); // create this service
+    setComments(res?.data || []);
+  };
+  
   useEffect(() => {
     const fetchIdea = async () => {
       const res = await getSingleIdea(ideaId as string);
       setIdea(res?.data);
     };
 
+    fetchComments();
     fetchIdea();
     setIsFetching(false);
   }, [ideaId]);
+
+  // after fetchComments:
+  const treeComments = buildCommentTree(comments);
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const toastId = toast.loading("Commenting idea...");
+    setCommentText("");
+    setIsCommentModalOpen(false);
+
+    try {
+      const res = await commentIdea(ideaId as string, commentText)
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+        await fetchComments();
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error);
+    }    
+  };  
+
+  // handleReply
+  const handleReply = async (parentId: string, text: string) => {
+    const res = await replyToComment(parentId as string, text);
+    if (res.success) {
+      const updated = await getAllComments(ideaId as string);
+      setComments(updated.data);
+      await fetchComments(); 
+    }
+  };
+
+  // hanldeUpdate
+  const handleUpdate = async (commentId: string, newText: string) => {
+    // Create `updateComment` service
+    const res = await updateComment(commentId, newText);
+    if (res.success) {
+      const updated = await getAllComments(ideaId as string);
+      setComments(updated.data);
+      await fetchComments(); 
+    }
+  };
 
   const handleVote = async (ideaId: string, voteType: string) => {
     const toastId = toast.loading("Upvoting idea...");
@@ -49,28 +110,25 @@ const SingleIdea = () => {
     }
   }
 
-  const handleCommentSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const toastId = toast.loading("Commenting idea...");
-    setCommentText("");
-    setIsCommentModalOpen(false);
+  const handleDelete = async (commentId: string) => {
+    const toastId = toast.loading("Deleting comment...");
 
     try {
-      const res = await commentIdea(ideaId as string, commentText)
+      const res = await deleteComment(commentId);
 
       if (res.success) {
-        toast.success(res.message, {
-          id: toastId,
-        });
+        toast.success(res.message, { id: toastId });
+
+        // Refresh comment list locally
+        const updated = comments.filter(comment => comment.id !== commentId);
+        setComments(updated);
+        await fetchComments();
       } else {
-        toast.error(res.message, {
-          id: toastId,
-        });
+        toast.error(res.message || "Failed to delete", { id: toastId });
       }
     } catch (error: any) {
-      toast.error(error.message);
-      console.error(error);
-    }    
+      toast.error(error.message || "Something went wrong");
+    }
   };
 
   if (isFetching) return <LoadingData />;
@@ -127,36 +185,54 @@ const SingleIdea = () => {
               </div>
           </div>
         </div>
-      {/* Comment Modal */}
-      {isCommentModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-600"
-              onClick={() => setIsCommentModalOpen(false)}
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h3 className="text-lg font-bold mb-4">Add Comment</h3>
-            <form onSubmit={handleCommentSubmit}>
-              <textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2 mb-4"
-                rows={4}
-                placeholder="Write your comment here..."
-                required
-              />
+        {/* Comment Modal */}
+        {isCommentModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
               <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="absolute top-2 right-2 text-gray-600 hover:text-red-600"
+                onClick={() => setIsCommentModalOpen(false)}
               >
-                Submit
+                <X className="w-5 h-5" />
               </button>
-            </form>
+              <h3 className="text-lg font-bold mb-4">Add Comment</h3>
+              <form onSubmit={handleCommentSubmit}>
+                <textarea
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg p-2 mb-4"
+                  rows={4}
+                  placeholder="Write your comment here..."
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}        
+        )}
+        {/* Display all comments  */}
+        <div className="mt-6">
+          {comments.length > 0 ? (
+            <h3 className="text-lg font-semibold mb-4">Comments</h3>
+          ) : (
+            <p className="text-gray-500">No comments available.</p>
+          )}
+          {treeComments.map((comment) => (
+            <CommentItem
+              key={comment.id}
+              comment={comment}
+              onReply={handleReply}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+              currentUserId={currentUserId!}
+            />
+          ))}
+        </div>        
     </div>
   );
 };
