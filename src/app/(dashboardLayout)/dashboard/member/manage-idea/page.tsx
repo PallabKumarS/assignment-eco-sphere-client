@@ -57,11 +57,17 @@ const IdeaPage = () => {
     fetchIdeasAndCategories();
   }, []);
 
+  console.log(categories);
+
   const getCategoryNamesFromIdea = (ids: Category[]) => {
     return ids.map((cat) => cat.name).join(', ');
   };
-  const handleEdit = (id: any) => {}
-  const handleDelete = (id: string) => {}
+  const handleEdit = (id: string) => {
+    console.log(id);
+  }
+  const handleDelete = (id: string) => {
+    console.log(id);
+  }
 
   if (loading) return <p className="text-center mt-8">Loading ideas...</p>;
 
@@ -96,7 +102,7 @@ const IdeaPage = () => {
               <td className="py-2 px-4 text-center">
                 <div className="flex items-center justify-center gap-2">
                   <button
-                    onClick={() => handleEdit(idea)}
+                    onClick={() => handleEdit(idea.id)}
                     className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                   >
                     Edit
