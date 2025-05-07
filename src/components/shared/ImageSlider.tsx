@@ -21,6 +21,7 @@ const isValidImageUrl = (url: string) => {
 
 const ImageSlider = ({ images, variant }: ImageSliderProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fallbackImage, setFallbackImage] = useState(
     "https://res.cloudinary.com/dchqfpvjb/image/upload/v1746446661/pngtree-light-bulb-with-brain-inside-the-concept-of-the-business-idea-image_15657372_s8io0l.jpg"
   );
@@ -57,10 +58,9 @@ const ImageSlider = ({ images, variant }: ImageSliderProps) => {
                 ? images[currentIndex]
                 : fallbackImage
             }
-            alt={`Product image ${currentIndex + 1}`}
+            alt={`Idea image ${currentIndex + 1}`}
             fill
             className="object-cover"
-            onError={() => setFallbackImage("/placeholder-house.jpg")}
             sizes={
               variant === "card"
                 ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

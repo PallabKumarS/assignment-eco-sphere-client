@@ -10,20 +10,16 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
   const queryString = new URLSearchParams(
     query as Record<string, string>
   ).toString();
-  const token = await getValidToken();
 
   try {
     const res = await fetch(`${process.env.BASE_API}/ideas?${queryString}`, {
       next: {
         tags: ["ideas"],
       },
-      headers: {
-        Authorization: token,
-      },
     });
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -64,6 +60,30 @@ export const createIdea = async (ideaData: FieldValues): Promise<any> => {
     return await res.json();
   } catch (error: any) {
     throw new Error(error.message || "Something went wrong");
+  }
+};
+
+// Update idea
+export const updateIdeaStatus = async (
+  ideaId: string,
+  status: string
+): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: status }),
+      headers: {
+        "Content-type": "application/json",
+        Authorization: token,
+      },
+    });
+    revalidateTag("ideas");
+
+    return await res.json();
+  } catch (error: any) {
+    return Error(error.message);
   }
 };
 

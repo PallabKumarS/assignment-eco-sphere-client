@@ -63,7 +63,7 @@ export default function LoginForm() {
       }
     } catch (error: any) {
       console.error("Form submission error", error);
-      toast.error(error.data.message, { id: toastId });
+      toast.error(error.message, { id: toastId });
     }
   }
 

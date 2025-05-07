@@ -12,7 +12,7 @@ const TestimonialsSection = ({ topIdeas }: TestimonialsSectionProps) => {
         Most popular ideas based on community votes
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {topIdeas.slice(0, 3).map((idea) => (
+        {topIdeas?.slice(0, 3).map((idea) => (
           <TestimonialCard key={idea.id} idea={idea} />
         ))}
       </div>

@@ -15,7 +15,7 @@ const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
 
   useEffect(() => {
     const fetchIdeas = async () => {
-      const res = await getAllIdeas(query);
+      const res = await getAllIdeas({ ...query, status: "APPROVED" });
       setIdeas(res?.data);
       setMeta(res?.meta);
     };
@@ -62,9 +62,7 @@ const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
               </p>
               <p className="text-sm mb-1">
                 <strong>Price:</strong>{" "}
-                {idea.isPaid
-                  ? `$${(idea.price as number).toFixed(2)}`
-                  : "Free"}
+                {idea.isPaid ? `$${(idea.price as number).toFixed(2)}` : "Free"}
               </p>
               <p className="text-sm mb-3">
                 <strong>Status:</strong> {idea.status}

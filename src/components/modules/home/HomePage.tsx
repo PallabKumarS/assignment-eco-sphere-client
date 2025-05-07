@@ -15,7 +15,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchIdeas = async () => {
-      const res = await getAllIdeas({ status: "APPROVED", isDeleted: false });
+      const res = await getAllIdeas({ status: "APPROVED" });
       setIdeas(res?.data);
     };
 

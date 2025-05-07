@@ -5,7 +5,7 @@ import { FileX2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const NoData = () => {
+const NoData = ({ message }: { message?: string }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,7 +24,7 @@ const NoData = () => {
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold tracking-tight">No Data Found</h2>
         <p className="text-muted-foreground">
-          We could not find any data to display at the moment
+          {message || "We could not find any data to display at the moment"}
         </p>
       </div>
 

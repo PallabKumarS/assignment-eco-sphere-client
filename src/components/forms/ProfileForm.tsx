@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { toast } from "sonner";
@@ -65,7 +66,7 @@ export default function ProfileForm({
       }
     } catch (error: any) {
       console.error("Form submission error", error);
-      toast.error(error.data.message, { id: toastId });
+      toast.error(error.message, { id: toastId });
       setIsLoading(false);
     }
   }
