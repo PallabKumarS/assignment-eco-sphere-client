@@ -33,9 +33,9 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex flex-col px-4 py-16 mx-auto md:py-12">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mx-auto">
+      <div className="max-w-[90%] flex flex-col px-4 py-16 mx-auto md:py-12">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 mx-auto justify-center items-start">
           {/* Brand Section */}
           <div className="space-y-4 mx-auto text-center">
             <div
