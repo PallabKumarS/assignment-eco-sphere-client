@@ -93,7 +93,7 @@ export const createIdea = async (ideaData: FieldValues): Promise<any> => {
 };
 
 // Update idea
-export const updateIdea = async (id: string, ideaData: IIdea): Promise<any> => {
+export const updateIdea = async (id: string, ideaData: any): Promise<any> => {
   const token = await getValidToken();
 
   const res = await fetch(`${process.env.BASE_API}/ideas/${id}`, {
@@ -104,7 +104,6 @@ export const updateIdea = async (id: string, ideaData: IIdea): Promise<any> => {
       Authorization: token,
     },
   });
-  console.log(res);
 
   if (!res.ok) {
     throw new Error("Failed to update idea");

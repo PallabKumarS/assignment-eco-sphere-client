@@ -32,12 +32,13 @@ export interface IIdea {
     id: string;
     name: string;
   }[];
+  status: TIdeaStatus;
   createdAt?: string; // optional timestamps
   updatedAt?: string;
 }
 
 
-type TIdeaStatus =
+export type TIdeaStatus =
   | "DRAFT"
   | "PENDING"
   | "UNDER_REVIEW"

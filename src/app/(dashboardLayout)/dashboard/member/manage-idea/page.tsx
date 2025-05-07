@@ -5,7 +5,7 @@ import LoadingData from '@/components/shared/LoadingData';
 import { PaginationComponent } from '@/components/shared/Pagination';
 import { getAllCategories } from '@/services/CategoryService';
 import { deleteIdea, getPersonalIdeas, updateIdea } from '@/services/IdeaService';
-import { IIdea, TMeta } from '@/types';
+import { IIdea, TIdeaStatus, TMeta } from '@/types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { Pencil, Trash } from "lucide-react";
@@ -82,6 +82,21 @@ const IdeaPage = () => {
     }
   };
 
+  const handleStatusChange = async (newStatus: TIdeaStatus, ideaId: string) => {
+    try {
+      await updateIdea(ideaId, {status: newStatus});
+      setIdeas((prevIdeas) =>
+        prevIdeas.map((idea) =>
+          idea.id === ideaId ? { ...idea, status: newStatus } : idea
+        )
+      );
+      toast.success("Idea status updated successfully");
+      // window.location.reload();
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
+
   if (isFetching) return <LoadingData />;
 
   return (
@@ -115,6 +130,7 @@ const IdeaPage = () => {
             <th className="py-3 px-4">Title</th>
             <th className="py-3 px-4">Description</th>
             <th className="py-3 px-4">Categories</th>
+            <th className="py-3 px-4">Status</th>
             <th className="py-3 px-4">Image</th>
             <th className="py-3 px-4 text-center">Actions</th>
           </tr>
@@ -125,6 +141,18 @@ const IdeaPage = () => {
               <td className="py-2 px-4">{idea.title}</td>
               <td className="py-2 px-4 line-clamp-2">{idea.description}</td>
               <td className="py-2 px-4">{getCategoryNamesFromIdea(idea.categories)}</td>
+              <td className="py-2 px-4">
+                <select
+                  className="border border-gray-300 rounded px-2 py-1"
+                  value={idea.status}
+                  onChange={(e) => handleStatusChange(e.target.value as TIdeaStatus, idea.id)}
+                >
+                  <option value={idea.status}>{idea.status}</option>
+                  {idea.status !== "PENDING" && (
+                    <option value="PENDING">PENDING</option>
+                  )}
+                </select>
+              </td>
               <td className="py-2 px-4">
                 <Image
                   src={idea.images[0]}
