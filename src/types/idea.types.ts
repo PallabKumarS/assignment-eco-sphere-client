@@ -20,15 +20,22 @@ export type TIdea = {
 };
 
 export interface IIdea {
+  id: string;
   title: string;
   problem: string;
   solution: string;
   description: string;
-  images: string[];
+  images: string[]; // Array of image URLs
+  isPaid: boolean;
   price: number;
-  categories: string[];
-  isPaid?: boolean;
+  categories: {
+    id: string;
+    name: string;
+  }[];
+  createdAt?: string; // optional timestamps
+  updatedAt?: string;
 }
+
 
 type TIdeaStatus =
   | "DRAFT"
