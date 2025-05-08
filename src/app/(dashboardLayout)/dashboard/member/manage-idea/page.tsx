@@ -1,15 +1,16 @@
 'use client';
 
+import CreateIdeaModal from '@/components/modules/idea/CreateIdeaModal';
+import LoadingData from '@/components/shared/LoadingData';
+import { PaginationComponent } from '@/components/shared/Pagination';
+import { getAllCategories } from '@/services/CategoryService';
+import { deleteIdea, getPersonalIdeas, updateIdea } from '@/services/IdeaService';
+import { IIdea, TIdeaStatus, TMeta } from '@/types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-
-type Idea = {
-  id: string;
-  title: string;
-  description: string;
-  images: string[];
-  categories: Category[];
-};
+import { Pencil, Trash } from "lucide-react";
+import { toast } from 'sonner';
+import EditIdeaModal from '@/components/modules/idea/EditIdeaModal';
 
 type Category = {
   id: string;
@@ -17,69 +18,119 @@ type Category = {
 };
 
 const IdeaPage = () => {
-  const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [ideas, setIdeas] = useState<IIdea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isFetching, setIsFetching] = useState(true);
+  const [meta, setMeta] = useState<TMeta>();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingIdea, setEditingIdea] = useState<IIdea | null>(null);
 
   useEffect(() => {
-    const fetchIdeasAndCategories = async () => {
-      try {
-        const token = document.cookie
-          .split('; ')
-          .find((row) => row.startsWith('accessToken='))
-          ?.split('=')[1];
+    const fetchIdea = async () => {
+      const res = await getPersonalIdeas();
+      const catRes = await getAllCategories();
 
-        if (!token) {
-          console.error('Access token not found');
-          return;
-        }
-
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
-        const [ideasRes, categoriesRes] = await Promise.all([
-          fetch('http://localhost:5000/api/ideas', { headers }),
-          fetch('http://localhost:5000/api/categories', { headers }),
-        ]);
-
-        const ideasData = await ideasRes.json();
-        const categoriesData = await categoriesRes.json();
-
-        setIdeas(ideasData?.data);
-        setCategories(categoriesData?.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching ideas or categories', err);
-      }
+      setIdeas(res?.data);
+      setMeta(res?.meta);
+      setCategories(catRes?.data);
     };
 
-    fetchIdeasAndCategories();
+    fetchIdea();
+    setIsFetching(false);
   }, []);
-
-  console.log(categories);
-
+  
   const getCategoryNamesFromIdea = (ids: Category[]) => {
-    return ids.map((cat) => cat.name).join(', ');
+    return ids?.map((cat) => cat.name).join(', ');
   };
-  const handleEdit = (id: string) => {
-    console.log(id);
-  }
-  const handleDelete = (id: string) => {
-    console.log(id);
-  }
 
-  if (loading) return <p className="text-center mt-8">Loading ideas...</p>;
+  const handleEdit = (id: string) => {
+    const ideaToEdit = ideas.find((idea) => idea.id === id);
+    if (ideaToEdit) {
+      setEditingIdea(ideaToEdit);
+      setIsEditModalOpen(true);
+    }
+  };
+  
+  const handleUpdate = async (id: string, updatedData: any) => {
+    try {
+      const res = await updateIdea(id, updatedData);
+
+      setIdeas((prev) =>
+        prev.map((idea) => (idea.id === id ? res.data : idea))
+      );
+      setEditingIdea(null);
+      setIsEditModalOpen(false);
+
+      toast.success("Idea updated successfully");
+      window.location.reload();
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this idea?");
+    if (!confirmDelete) return;
+    try {
+      await deleteIdea(id);
+      setIdeas((prev) => prev.filter((idea) => idea.id !== id)); // remove from state
+      toast.success("Idea deleted successfully");
+    } catch (error: any) {
+      toast.error("Failed to delete idea");
+      console.error("Delete Error:", error);
+    }
+  };
+
+  const handleStatusChange = async (newStatus: TIdeaStatus, ideaId: string) => {
+    try {
+      await updateIdea(ideaId, {status: newStatus});
+      setIdeas((prevIdeas) =>
+        prevIdeas.map((idea) =>
+          idea.id === ideaId ? { ...idea, status: newStatus } : idea
+        )
+      );
+      toast.success("Idea status updated successfully");
+      // window.location.reload();
+    } catch (err) {
+      console.error("Update failed", err);
+    }
+  };
+
+  if (isFetching) return <LoadingData />;
 
   return (
     <div className="p-6 overflow-x-auto">
-      <button className="px-3 py-1 mb-8 bg-blue-500 text-white rounded hover:bg-blue-600">Create An Idea</button>
+      <button
+        className="px-3 py-1 mb-8 bg-blue-500 text-white rounded hover:bg-blue-600"
+        onClick={() => setIsModalOpen(true)}
+      >
+        Create An Idea
+      </button>
+
+      <CreateIdeaModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        categories={categories}
+        onCreate={(newIdea) => setIdeas((prev) => [newIdea, ...prev])}
+      />
+      <EditIdeaModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingIdea(null);
+        }}
+        categories={categories}
+        idea={editingIdea}
+        onUpdate={handleUpdate}
+      />
       <table className="min-w-full bg-white rounded-lg shadow-md">
         <thead>
           <tr className="bg-gray-100 text-left">
             <th className="py-3 px-4">Title</th>
             <th className="py-3 px-4">Description</th>
             <th className="py-3 px-4">Categories</th>
+            <th className="py-3 px-4">Status</th>
             <th className="py-3 px-4">Image</th>
             <th className="py-3 px-4 text-center">Actions</th>
           </tr>
@@ -90,6 +141,18 @@ const IdeaPage = () => {
               <td className="py-2 px-4">{idea.title}</td>
               <td className="py-2 px-4 line-clamp-2">{idea.description}</td>
               <td className="py-2 px-4">{getCategoryNamesFromIdea(idea.categories)}</td>
+              <td className="py-2 px-4">
+                <select
+                  className="border border-gray-300 rounded px-2 py-1"
+                  value={idea.status}
+                  onChange={(e) => handleStatusChange(e.target.value as TIdeaStatus, idea.id)}
+                >
+                  <option value={idea.status}>{idea.status}</option>
+                  {idea.status !== "PENDING" && (
+                    <option value="PENDING">PENDING</option>
+                  )}
+                </select>
+              </td>
               <td className="py-2 px-4">
                 <Image
                   src={idea.images[0]}
@@ -103,15 +166,17 @@ const IdeaPage = () => {
                 <div className="flex items-center justify-center gap-2">
                   <button
                     onClick={() => handleEdit(idea.id)}
-                    className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    title="Edit"
                   >
-                    Edit
+                    <Pencil size={18} />
                   </button>
                   <button
                     onClick={() => handleDelete(idea.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    title="Delete"
                   >
-                    Delete
+                    <Trash size={18} />
                   </button>
                 </div>
               </td>
@@ -119,6 +184,10 @@ const IdeaPage = () => {
           ))}
         </tbody>
       </table>
+
+      <div className='mt-8'> 
+        <PaginationComponent meta={meta} />
+      </div>
     </div>
   );
 };
