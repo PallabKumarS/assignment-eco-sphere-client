@@ -7,7 +7,6 @@ import { getAllIdeas } from "@/services/IdeaService";
 import IdeaCardM from "@/components/modules/member/IdeaCardM";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/shared/Container";
-import { Filter } from "lucide-react";
 import FilterComponent from "@/components/shared/Filter";
 
 const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
@@ -54,7 +53,7 @@ const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
 
       {ideas?.length === 0 && (
         <div className="text-center py-10">
-          <p className="text-gray-500">No ideas found</p>
+          <p className="">No ideas found</p>
         </div>
       )}
 
