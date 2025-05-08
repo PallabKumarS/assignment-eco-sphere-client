@@ -23,6 +23,31 @@ export const getAllIdeas = async (query?: Record<string, unknown>) => {
   }
 };
 
+// Get all ideas
+export const getPersonalIdeas = async (query?: Record<string, unknown>) => {
+  const queryString = new URLSearchParams(
+    query as Record<string, string>
+  ).toString();
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(
+      `${process.env.BASE_API}/ideas/personal?${queryString}`,
+      {
+        next: {
+          tags: ["ideas"],
+        },
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return await res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
 // Get single idea
 export const getSingleIdea = async (ideaId: string) => {
   const token = await getValidToken();
@@ -46,7 +71,7 @@ export const createIdea = async (ideaData: FieldValues): Promise<any> => {
   const token = await getValidToken();
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/ideas`, {
+    const res = await fetch(`${process.env.BASE_API}/ideas`, {
       method: "POST",
       body: JSON.stringify(ideaData),
       headers: {
@@ -96,20 +121,38 @@ export const updateIdeaStatus = async (
   }
 };
 
+// Update idea
+export const updateIdea = async (id: string, ideaData: any): Promise<any> => {
+  const token = await getValidToken();
+
+  const res = await fetch(`${process.env.BASE_API}/ideas/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(ideaData),
+    headers: {
+      "Content-type": "application/json",
+      Authorization: token,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to update idea");
+  }
+
+  revalidateTag("ideas");
+  return await res.json();
+};
+
 // Delete idea
 export const deleteIdea = async (ideaId: string): Promise<any> => {
   const token = await getValidToken();
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/ideas/${ideaId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    });
 
     revalidateTag("ideas");
     return await res.json();
