@@ -68,7 +68,7 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
         <h1 className="text-2xl font-bold">Idea Management</h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
+      <div className="bg-base-300 rounded-lg shadow p-6 mb-6">
         {/* search bar here  */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1">

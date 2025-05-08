@@ -89,19 +89,19 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
 
         {description && (
           <div className="mb-3">
-            <p className="text-sm text-gray-600 font-medium">Description:</p>
-            <p className="text-sm text-gray-700 line-clamp-2">{description}</p>
+            <p className="text-sm  font-medium">Description:</p>
+            <p className="text-sm  line-clamp-2">{description}</p>
           </div>
         )}
 
         {solution && (
           <div className="mb-3">
-            <p className="text-sm text-gray-600 font-medium">Solution:</p>
-            <p className="text-sm text-gray-700 line-clamp-2">{solution}</p>
+            <p className="text-sm font-medium">Solution:</p>
+            <p className="text-sm line-clamp-2">{solution}</p>
           </div>
         )}
 
-        <div className="flex items-center text-sm text-gray-500 mb-2">
+        <div className="flex items-center text-sm mb-2">
           <span>By {users?.name || "Unknown"}</span>
         </div>
 
