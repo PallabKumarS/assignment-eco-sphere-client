@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useState } from "react";
-import { TIdea, IdeaStatus } from "@/types";
+import { TIdea, TIdeaStatus } from "@/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,7 +66,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
   };
 
   const handleStatusChange = async (newStatus: string) => {
-    if (newStatus === IdeaStatus.REJECTED) {
+    if (newStatus === TIdeaStatus.REJECTED) {
       setPendingStatus(newStatus);
       setIsRejectionModalOpen(true);
       return;
@@ -97,7 +97,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
   };
 
   const handleRejectionSubmit = async () => {
-    if (pendingStatus === IdeaStatus.REJECTED) {
+    if (pendingStatus === TIdeaStatus.REJECTED) {
       await updateStatus(pendingStatus, feedback);
     }
     setIsRejectionModalOpen(false);
@@ -105,15 +105,15 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
     setPendingStatus(null);
   };
 
-  const getStatusColor = (status: IdeaStatus) => {
+  const getStatusColor = (status: TIdeaStatus) => {
     switch (status) {
-      case IdeaStatus.APPROVED:
+      case TIdeaStatus.APPROVED:
         return "bg-green-100 text-green-800";
-      case IdeaStatus.REJECTED:
+      case TIdeaStatus.REJECTED:
         return "bg-red-100 text-red-800";
-      case IdeaStatus.PENDING:
+      case TIdeaStatus.PENDING:
         return "bg-yellow-100 text-yellow-800";
-      case IdeaStatus.UNDER_REVIEW:
+      case TIdeaStatus.UNDER_REVIEW:
         return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -172,19 +172,19 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
           <Select defaultValue={status} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-[140px]">
               <SelectValue>
-                <Badge className={getStatusColor(status as IdeaStatus)}>
+                <Badge className={getStatusColor(status as TIdeaStatus)}>
                   {status}
                 </Badge>
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-background/80">
-              <SelectItem value={IdeaStatus.DRAFT}>Draft</SelectItem>
-              <SelectItem value={IdeaStatus.PENDING}>Pending</SelectItem>
-              <SelectItem value={IdeaStatus.UNDER_REVIEW}>
+              <SelectItem value={TIdeaStatus.DRAFT}>Draft</SelectItem>
+              <SelectItem value={TIdeaStatus.PENDING}>Pending</SelectItem>
+              <SelectItem value={TIdeaStatus.UNDER_REVIEW}>
                 Under Review
               </SelectItem>
-              <SelectItem value={IdeaStatus.APPROVED}>Approved</SelectItem>
-              <SelectItem value={IdeaStatus.REJECTED}>Rejected</SelectItem>
+              <SelectItem value={TIdeaStatus.APPROVED}>Approved</SelectItem>
+              <SelectItem value={TIdeaStatus.REJECTED}>Rejected</SelectItem>
             </SelectContent>
           </Select>
 

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { TIdea, IdeaStatus } from "@/types";
+import { TIdea, TIdeaStatus } from "@/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,15 +24,15 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     description,
   } = idea;
 
-  const getStatusColor = (status: IdeaStatus) => {
+  const getStatusColor = (status: TIdeaStatus) => {
     switch (status) {
-      case IdeaStatus.APPROVED:
+      case TIdeaStatus.APPROVED:
         return "bg-green-100 text-green-800";
-      case IdeaStatus.REJECTED:
+      case TIdeaStatus.REJECTED:
         return "bg-red-100 text-red-800";
-      case IdeaStatus.PENDING:
+      case TIdeaStatus.PENDING:
         return "bg-yellow-100 text-yellow-800";
-      case IdeaStatus.UNDER_REVIEW:
+      case TIdeaStatus.UNDER_REVIEW:
         return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -44,7 +44,7 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <Badge className={getStatusColor(status as IdeaStatus)}>
+          <Badge className={getStatusColor(status as TIdeaStatus)}>
             {status}
           </Badge>
         </div>

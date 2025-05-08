@@ -9,7 +9,7 @@ import {
   getPersonalIdeas,
   updateIdea,
 } from "@/services/IdeaService";
-import { IIdea, TIdeaStatus, TMeta } from "@/types";
+import { TIdea, TIdeaStatus, TMeta } from "@/types";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Pencil, Trash } from "lucide-react";
@@ -22,13 +22,13 @@ type Category = {
 };
 
 const IdeaPage = () => {
-  const [ideas, setIdeas] = useState<IIdea[]>([]);
+  const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [isFetching, setIsFetching] = useState(true);
   const [meta, setMeta] = useState<TMeta>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingIdea, setEditingIdea] = useState<IIdea | null>(null);
+  const [editingIdea, setEditingIdea] = useState<TIdea | null>(null);
 
   useEffect(() => {
     const fetchIdea = async () => {

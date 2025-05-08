@@ -10,7 +10,7 @@ export type TIdea = {
   solution: string;
   description: string;
   images: string[];
-  status: IdeaStatus;
+  status: TIdeaStatus;
   feedback?: string;
   isPaid: boolean;
   price?: number;
@@ -32,7 +32,7 @@ export type TPaidIdeaPurchase = {
   createdAt: Date;
 };
 
-export enum IdeaStatus {
+export enum TIdeaStatus {
   DRAFT = "DRAFT",
   PENDING = "PENDING",
   UNDER_REVIEW = "UNDER_REVIEW",
