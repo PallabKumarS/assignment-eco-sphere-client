@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { Slider } from "@/components/ui/slider";
+import { useEffect, useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -24,49 +23,55 @@ import { useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "../ui/checkbox";
-import { useGetAllCategoriesQuery } from "@/redux/api/categoryApi";
-import { TCategory, TMongoose } from "@/types";
+import { getAllCategories } from "@/services/CategoryService";
+import { TCategory } from "@/types";
 
-const Filter = () => {
+const FilterComponent = () => {
   const router = useRouter();
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [availability, setAvailability] = useState<string | undefined>();
+  const [paid, setPaid] = useState<string | undefined>();
+  const [isFetching, setIsFetching] = useState(true);
+  const [categories, setCategories] = useState<TCategory[]>([]);
 
-  const { data: categories, isFetching } = useGetAllCategoriesQuery(undefined, {
-    refetchOnMountOrArgChange: true,
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await getAllCategories();
+      setCategories(res.data);
+      setIsFetching(false);
+    };
+
+    fetchCategories();
   });
 
   const handleApplyFilter = () => {
     const params = new URLSearchParams();
 
-    if (priceRange[0] > 0 || priceRange[1] < 50000) {
-      params.set("minPrice", priceRange[0].toString());
-      params.set("maxPrice", priceRange[1].toString());
-    }
-    if (availability !== undefined) {
-      params.set("availability", availability);
+    if (paid !== undefined) {
+      params.set("isPaid", paid);
     }
     if (selectedCategories.length > 0) {
-      params.set("category", selectedCategories.join(","));
+      params.set("categoryId", selectedCategories.join(","));
     }
 
-    router.push(`/listings?${params.toString()}`);
+    router.push(`/ideas?${params.toString()}`);
   };
 
   const handleClearFilter = () => {
-    setPriceRange([0, 50000]);
     setSelectedCategories([]);
-    setAvailability(undefined);
-    router.push("/listings");
+    setPaid(undefined);
+    router.push("/ideas");
   };
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon">
-          <SlidersHorizontal className="h-4 w-4" />
+        <Button
+          variant="outline"
+          size="icon"
+          className="flex flex-1 w-full px-6"
+        >
+          <SlidersHorizontal className="h-4 w-4" /> Filter
         </Button>
       </SheetTrigger>
       <SheetContent className="px-3 md:px-8 bg-sidebar">
@@ -75,27 +80,6 @@ const Filter = () => {
           <SheetTitle>Filter Listings</SheetTitle>
         </SheetHeader>
         <div className="space-y-4 mt-4">
-          {/* Price Range */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Price Range</label>
-            <div className="pt-2">
-              <Slider
-                defaultValue={[0, 50000]}
-                max={50000}
-                step={500}
-                value={priceRange}
-                onValueChange={(priceRange) =>
-                  setPriceRange(priceRange as [number, number])
-                }
-                className="my-4"
-              />
-              <div className="flex justify-between text-sm">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
-              </div>
-            </div>
-          </div>
-
           {/* Categories */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Categories</label>
@@ -107,23 +91,23 @@ const Filter = () => {
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup aria-checked="mixed">
-                  {categories?.data?.map((category: TCategory & TMongoose) => (
+                  {categories?.map((category: TCategory) => (
                     <CommandItem
                       className="flex items-center gap-2"
-                      key={category._id}
+                      key={category.id}
                       disabled={isFetching}
                       onSelect={() => {
                         setSelectedCategories((prev) =>
-                          prev.includes(category._id)
-                            ? prev.filter((id) => id !== category._id)
-                            : [...prev, category._id]
+                          prev.includes(category.id)
+                            ? prev.filter((id) => id !== category.id)
+                            : [...prev, category.id]
                         );
                       }}
                     >
                       <Checkbox
-                        checked={selectedCategories.includes(category._id)}
+                        checked={selectedCategories.includes(category.id)}
                       />
-                      {category.title}
+                      {category.name}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -131,21 +115,21 @@ const Filter = () => {
             </Command>
           </div>
 
-          {/* Availability */}
+          {/* Paid Ideas */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Availability</label>
+            <label className="text-sm font-medium">Paid Ideas</label>
             <RadioGroup
-              value={availability}
-              onValueChange={(value) => setAvailability(value)}
+              value={paid}
+              onValueChange={(value) => setPaid(value)}
               className="flex flex-col space-y-1 mt-2"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="true" id="available" />
-                <Label htmlFor="available">Available</Label>
+                <RadioGroupItem value="true" id="paid" />
+                <Label htmlFor="paid">Paid</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="false" id="out_of_stock" />
-                <Label htmlFor="out_of_stock">Out of stock</Label>
+                <RadioGroupItem value="false" id="free" />
+                <Label htmlFor="free">Free</Label>
               </div>
             </RadioGroup>
           </div>
@@ -163,4 +147,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default FilterComponent;

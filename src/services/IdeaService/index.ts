@@ -91,14 +91,23 @@ export const createIdea = async (ideaData: FieldValues): Promise<any> => {
 // Update idea
 export const updateIdeaStatus = async (
   ideaId: string,
-  status: string
+  status: string,
+  feedback?: string
 ): Promise<any> => {
   const token = await getValidToken();
+
+  const payload: { status: string; feedback?: string } = {
+    status: status,
+  };
+
+  if (feedback) {
+    payload.feedback = feedback;
+  }
 
   try {
     const res = await fetch(`${process.env.BASE_API}/ideas/${ideaId}`, {
       method: "PATCH",
-      body: JSON.stringify({ status: status }),
+      body: JSON.stringify(payload),
       headers: {
         "Content-type": "application/json",
         Authorization: token,

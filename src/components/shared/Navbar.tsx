@@ -28,6 +28,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppContext } from "@/providers/ContextProvider";
 import { config } from "@/middleware";
+import Container from "./Container";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,7 +52,7 @@ export default function Navbar() {
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 py-2 shadow-sm">
-      <nav className="container mx-auto px-4 flex items-center justify-center lg:justify-between gap-4 flex-wrap lg:flex-nowrap">
+      <nav className="max-w-[90%] mx-auto px-4 flex items-center justify-center lg:justify-between gap-4 flex-wrap lg:flex-nowrap">
         {/* Logo with hover effect */}
         <div
           onClick={() => router.push("/")}
@@ -208,23 +209,18 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              {user && user.role === "seller" && (
+              {user?.role === "MEMBER" && (
                 <Link
-                  href="/dashboard/seller/create-listing"
-                  className="
-                    flex items-center gap-3 
-                    text-muted-foreground 
-                    hover:text-primary 
-                    transition-colors 
-                    py-2 
-                    px-3 
+                  href="/dashboard/member/manage-idea"
+                  className="hidden sm:flex items-center gap-2 
+                    bg-primary/10 text-primary 
+                    hover:bg-primary/20 
+                    px-3 py-2 
                     rounded-full 
-                    hover:bg-accent/20
-                  "
-                  onClick={() => setIsMenuOpen(false)}
+                    transition-colors"
                 >
                   <PlusCircle className="w-5 h-5" />
-                  Post Rental
+                  Post Idea
                 </Link>
               )}
             </div>

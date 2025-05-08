@@ -29,13 +29,25 @@ interface TestimonialCardProps {
   idea: TIdea;
 }
 
+const isValidImageUrl = (url: string) => {
+  const pattern = new RegExp(
+    "^https?:\\/\\/.+\\.(jpg|jpeg|png|webp|gif|bmp)$",
+    "i"
+  );
+  return pattern.test(url);
+};
+
 const TestimonialCard = ({ idea }: TestimonialCardProps) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
       <div className="flex items-center mb-4">
         <div className="relative h-16 w-16 rounded-full overflow-hidden mr-4">
           <Image
-            src={idea.images[0] || "/images/default-idea.jpg"}
+            src={
+              isValidImageUrl(idea.images[0])
+                ? idea.images[0]
+                : "https://res.cloudinary.com/dchqfpvjb/image/upload/v1746446661/pngtree-light-bulb-with-brain-inside-the-concept-of-the-business-idea-image_15657372_s8io0l.jpg"
+            }
             alt={idea.title}
             fill
             className="object-cover"

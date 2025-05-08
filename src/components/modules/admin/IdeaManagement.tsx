@@ -5,7 +5,6 @@ import { getAllIdeas } from "@/services/IdeaService";
 import { TIdea, TMeta } from "@/types";
 import LoadingData from "@/components/shared/LoadingData";
 import IdeaCard from "./IdeaCard";
-import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 import {
   Select,
@@ -17,12 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { PaginationComponent } from "@/components/shared/Pagination";
 import NoData from "@/components/shared/NoData";
-import { usePathname, useRouter } from "next/navigation";
 
 const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
-  const router = useRouter();
-  const pathname = usePathname();
-
   const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [meta, setMeta] = useState<TMeta>();
   const [isFetching, setIsFetching] = useState(true);
@@ -36,7 +31,8 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
         const res = await getAllIdeas({
           ...query,
           limit: 12,
-          status: statusFilter === "all" ? "" : statusFilter || undefined,
+          status: statusFilter === "all" ? "" : statusFilter,
+          searchTerm: searchTerm ? searchTerm : "",
         });
         setIdeas(res?.data || []);
         setMeta(res?.meta);
@@ -48,19 +44,7 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
     };
 
     fetchIdeas();
-  }, [query, statusFilter]);
-
-  const handleSearch = async () => {
-    if (!searchTerm) return;
-
-    console.log(searchTerm,pathname);
-
-    // const params = new URLSearchParams();
-    // router.push(`${pathname}?${params.toString()}`);
-    router.push(`${pathname}?searchTerm=${searchTerm}`);
-  };
-
-  if (isFetching) return <LoadingData />;
+  }, [query, statusFilter, searchTerm]);
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -71,16 +55,13 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
       <div className="bg-base-300 rounded-lg shadow p-6 mb-6">
         {/* search bar here  */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <form onSubmit={handleSearch} className="flex gap-2">
-              <Input
-                placeholder="Search ideas..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="flex-1"
-              />
-              <Button type="submit">Search</Button>
-            </form>
+          <div className="flex-1 flex items-center gap-2">
+            <Input
+              placeholder="Search ideas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1"
+            />
           </div>
 
           {/* status filter here */}
@@ -102,11 +83,13 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
           </div>
         </div>
 
+        {isFetching && <LoadingData />}
+
         {ideas.length === 0 ? (
           <NoData message="  No ideas found. Try adjusting your filters." />
         ) : (
           <>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(275px,100%),1fr))] gap-6">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(275px,100%),1fr))] gap-6 mb-16">
               {ideas?.map((idea) => (
                 <IdeaCard key={idea.id} idea={idea} />
               ))}
