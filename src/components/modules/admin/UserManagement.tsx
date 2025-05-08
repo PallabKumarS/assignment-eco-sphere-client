@@ -22,7 +22,7 @@ import {
 } from "@/services/UserService";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
-import { PaginationComponent } from "@/components/shared/Pagination";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
 
 const UserManagement = ({ query }: { query: Record<string, unknown> }) => {
   const [users, setUsers] = useState<TUser[]>([]);

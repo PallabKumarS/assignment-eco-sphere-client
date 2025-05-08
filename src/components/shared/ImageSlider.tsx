@@ -40,7 +40,7 @@ const ImageSlider = ({ images, variant }: ImageSliderProps) => {
     <div
       className={cn(
         "relative overflow-hidden rounded-t-lg",
-        variant === "card" ? "h-48" : "h-[60vh]"
+        variant === "card" ? "h-48" : "h-[50vh]"
       )}
     >
       <AnimatePresence mode="wait">

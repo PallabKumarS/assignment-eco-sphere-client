@@ -14,7 +14,7 @@ import {
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Modal } from "@/components/shared/Modal";
 import CategoryForm from "@/components/forms/CategoryForm";
-import { PaginationComponent } from "@/components/shared/Pagination";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
 import ConfirmationBox from "@/components/shared/ConfirmationBox";
 import { toast } from "sonner";
 

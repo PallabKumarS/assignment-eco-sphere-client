@@ -6,27 +6,29 @@ import { revalidateTag } from "next/cache";
 
 // Get all Comments
 export const getAllComments = async (ideaId: string) => {
-
   try {
     const res = await fetch(`${process.env.BASE_API}/comments/${ideaId}`, {
       next: {
         tags: ["comments"],
-      }
+      },
     });
-    return await res.json();    
+    return await res.json();
   } catch (error: any) {
     return Error(error.message);
   }
 };
 
 // Comment an idea
-export const commentIdea = async (ideaId: string, commentData: string): Promise<any> => {
+export const commentIdea = async (
+  ideaId: string,
+  commentData: string
+): Promise<any> => {
   const token = await getValidToken();
 
   try {
     const res = await fetch(`${process.env.BASE_API}/comments/${ideaId}`, {
       method: "POST",
-      body: JSON.stringify({content: commentData}),
+      body: JSON.stringify({ content: commentData }),
       headers: {
         "Content-type": "application/json",
         Authorization: token,
@@ -42,7 +44,10 @@ export const commentIdea = async (ideaId: string, commentData: string): Promise<
 };
 
 // Update a comment
-export const updateComment = async (commentId: string, updatedContent: string): Promise<any> => {
+export const updateComment = async (
+  commentId: string,
+  updatedContent: string
+): Promise<any> => {
   const token = await getValidToken();
 
   try {
@@ -92,14 +97,17 @@ export const replyToComment = async (
   const token = await getValidToken();
 
   try {
-    const res = await fetch(`${process.env.BASE_API}/comments/${parentId}/reply`, {
-      method: "POST",
-      body: JSON.stringify({ content: replyContent }),
-      headers: {
-        "Content-type": "application/json",
-        Authorization: token,
-      },
-    });
+    const res = await fetch(
+      `${process.env.BASE_API}/comments/${parentId}/reply`,
+      {
+        method: "POST",
+        body: JSON.stringify({ content: replyContent }),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
 
     revalidateTag("comments");
 

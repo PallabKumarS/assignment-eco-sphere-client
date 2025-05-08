@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -5,7 +6,7 @@ import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { IIdea } from "@/types";
+import {  TCategory, TIdea } from "@/types";
 
 type Category = {
   id: string;
@@ -16,7 +17,7 @@ type EditIdeaModalProps = {
   isOpen: boolean;
   onClose: () => void;
   categories: Category[];
-  idea: IIdea | null;
+  idea: TIdea | null;
   onUpdate: (id: string, data: any) => Promise<void>;
 };
 
@@ -39,7 +40,7 @@ const EditIdeaModal: React.FC<EditIdeaModalProps> = ({
         description: idea.description,
         images: idea.images.join(", "),
         price: idea.price,
-        categories: idea.categories.map((c) => c.id),
+        categories: idea.categories.map((c: TCategory) => c.id),
       });
       setIsPaid(idea.isPaid);
     }

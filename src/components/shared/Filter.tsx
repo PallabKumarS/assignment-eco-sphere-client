@@ -19,7 +19,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "../ui/checkbox";
@@ -28,6 +28,7 @@ import { TCategory } from "@/types";
 
 const FilterComponent = () => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [paid, setPaid] = useState<string | undefined>();
@@ -42,7 +43,7 @@ const FilterComponent = () => {
     };
 
     fetchCategories();
-  });
+  }, []);
 
   const handleApplyFilter = () => {
     const params = new URLSearchParams();
@@ -54,23 +55,19 @@ const FilterComponent = () => {
       params.set("categoryId", selectedCategories.join(","));
     }
 
-    router.push(`/ideas?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleClearFilter = () => {
     setSelectedCategories([]);
     setPaid(undefined);
-    router.push("/ideas");
+    router.push(pathname);
   };
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="flex flex-1 w-full px-6"
-        >
+        <Button variant="outline" size="icon" className="w-fit px-6">
           <SlidersHorizontal className="h-4 w-4" /> Filter
         </Button>
       </SheetTrigger>

@@ -1,16 +1,20 @@
-'use client';
+"use client";
 
-import CreateIdeaModal from '@/components/modules/idea/CreateIdeaModal';
-import LoadingData from '@/components/shared/LoadingData';
-import { PaginationComponent } from '@/components/shared/Pagination';
-import { getAllCategories } from '@/services/CategoryService';
-import { deleteIdea, getPersonalIdeas, updateIdea } from '@/services/IdeaService';
-import { IIdea, TIdeaStatus, TMeta } from '@/types';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import CreateIdeaModal from "@/components/modules/idea/CreateIdeaModal";
+import LoadingData from "@/components/shared/LoadingData";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
+import { getAllCategories } from "@/services/CategoryService";
+import {
+  deleteIdea,
+  getPersonalIdeas,
+  updateIdea,
+} from "@/services/IdeaService";
+import { IIdea, TIdeaStatus, TMeta } from "@/types";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import { Pencil, Trash } from "lucide-react";
-import { toast } from 'sonner';
-import EditIdeaModal from '@/components/modules/idea/EditIdeaModal';
+import { toast } from "sonner";
+import EditIdeaModal from "@/components/modules/idea/EditIdeaModal";
 
 type Category = {
   id: string;
@@ -39,9 +43,9 @@ const IdeaPage = () => {
     fetchIdea();
     setIsFetching(false);
   }, []);
-  
+
   const getCategoryNamesFromIdea = (ids: Category[]) => {
-    return ids?.map((cat) => cat.name).join(', ');
+    return ids?.map((cat) => cat.name).join(", ");
   };
 
   const handleEdit = (id: string) => {
@@ -51,7 +55,7 @@ const IdeaPage = () => {
       setIsEditModalOpen(true);
     }
   };
-  
+
   const handleUpdate = async (id: string, updatedData: any) => {
     try {
       const res = await updateIdea(id, updatedData);
@@ -70,7 +74,9 @@ const IdeaPage = () => {
   };
 
   const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this idea?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this idea?"
+    );
     if (!confirmDelete) return;
     try {
       await deleteIdea(id);
@@ -84,7 +90,7 @@ const IdeaPage = () => {
 
   const handleStatusChange = async (newStatus: TIdeaStatus, ideaId: string) => {
     try {
-      await updateIdea(ideaId, {status: newStatus});
+      await updateIdea(ideaId, { status: newStatus });
       setIdeas((prevIdeas) =>
         prevIdeas.map((idea) =>
           idea.id === ideaId ? { ...idea, status: newStatus } : idea
@@ -140,12 +146,16 @@ const IdeaPage = () => {
             <tr key={idea.id} className="border-t">
               <td className="py-2 px-4">{idea.title}</td>
               <td className="py-2 px-4 line-clamp-2">{idea.description}</td>
-              <td className="py-2 px-4">{getCategoryNamesFromIdea(idea.categories)}</td>
+              <td className="py-2 px-4">
+                {getCategoryNamesFromIdea(idea.categories)}
+              </td>
               <td className="py-2 px-4">
                 <select
                   className="border border-gray-300 rounded px-2 py-1"
                   value={idea.status}
-                  onChange={(e) => handleStatusChange(e.target.value as TIdeaStatus, idea.id)}
+                  onChange={(e) =>
+                    handleStatusChange(e.target.value as TIdeaStatus, idea.id)
+                  }
                 >
                   <option value={idea.status}>{idea.status}</option>
                   {idea.status !== "PENDING" && (
@@ -185,7 +195,7 @@ const IdeaPage = () => {
         </tbody>
       </table>
 
-      <div className='mt-8'> 
+      <div className="mt-8">
         <PaginationComponent meta={meta} />
       </div>
     </div>
@@ -193,4 +203,3 @@ const IdeaPage = () => {
 };
 
 export default IdeaPage;
-

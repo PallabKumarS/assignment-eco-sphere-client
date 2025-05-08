@@ -5,7 +5,7 @@ import { getAllIdeas } from "@/services/IdeaService";
 import { TIdea, TMeta } from "@/types";
 import LoadingData from "@/components/shared/LoadingData";
 import IdeaCard from "./IdeaCard";
-import { Filter } from "lucide-react";
+import { Filter, X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -14,14 +14,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { PaginationComponent } from "@/components/shared/Pagination";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
 import NoData from "@/components/shared/NoData";
+import { Button } from "@/components/ui/button";
+import { usePathname, useRouter } from "next/navigation";
 
 const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [meta, setMeta] = useState<TMeta>();
-  const [isFetching, setIsFetching] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
@@ -32,7 +36,6 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
           ...query,
           limit: 12,
           status: statusFilter === "all" ? "" : statusFilter,
-          searchTerm: searchTerm ? searchTerm : "",
         });
         setIdeas(res?.data || []);
         setMeta(res?.meta);
@@ -44,25 +47,54 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
     };
 
     fetchIdeas();
-  }, [query, statusFilter, searchTerm]);
+  }, [query, statusFilter]);
+
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const searchTerm = formData.get("searchTerm");
+    if (!searchTerm) return;
+
+    router.push(`${pathname}?searchTerm=${searchTerm}`);
+  };
+
+  const handleClearFilter = async () => {
+    router.push(pathname);
+  };
+
+  const clearSearch = () => {
+    router.push(
+      `${pathname}?status=${statusFilter === "all" ? "" : statusFilter}`
+    );
+  };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Idea Management</h1>
       </div>
 
-      <div className="bg-base-300 rounded-lg shadow p-6 mb-6">
+      <div className="bg-base-300 rounded-lg shadow px-2 py-6 mb-6">
         {/* search bar here  */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
-          <div className="flex-1 flex items-center gap-2">
+          <form
+            onSubmit={handleSearch}
+            className="flex items-center gap-2 flex-1 relative"
+          >
             <Input
+              name="searchTerm"
               placeholder="Search ideas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1"
             />
-          </div>
+            <Button type="submit">Search</Button>
+            <Button
+              className="flex gap-2 absolute right-20 top-0"
+              type="reset"
+              onClick={clearSearch}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </form>
 
           {/* status filter here */}
           <div className="flex gap-2 items-center">
@@ -81,6 +113,14 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
               </SelectContent>
             </Select>
           </div>
+
+          <Button
+            className="flex gap-2"
+            type="reset"
+            onClick={handleClearFilter}
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
 
         {isFetching && <LoadingData />}
@@ -89,7 +129,7 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
           <NoData message="  No ideas found. Try adjusting your filters." />
         ) : (
           <>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(275px,100%),1fr))] gap-6 mb-16">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-6 mb-16">
               {ideas?.map((idea) => (
                 <IdeaCard key={idea.id} idea={idea} />
               ))}

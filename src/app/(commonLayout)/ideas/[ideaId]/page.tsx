@@ -5,7 +5,6 @@ import { TComment, TIdea } from "@/types";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
 import { getSingleIdea } from "@/services/IdeaService";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import { ThumbsUp, ThumbsDown, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
@@ -20,6 +19,8 @@ import {
 import CommentItem from "@/components/shared/CommentItem";
 import { buildCommentTree } from "@/lib/utils";
 import { useAppContext } from "@/providers/ContextProvider";
+import { Modal } from "@/components/shared/Modal";
+import ImageSlider from "@/components/shared/ImageSlider";
 
 const SingleIdea = () => {
   const [idea, setIdea] = useState<TIdea>();
@@ -85,7 +86,7 @@ const SingleIdea = () => {
     }
   };
 
-  // hanldeUpdate
+  // handleUpdate
   const handleUpdate = async (commentId: string, newText: string) => {
     // Create `updateComment` service
     const res = await updateComment(commentId, newText);
@@ -138,26 +139,24 @@ const SingleIdea = () => {
     }
   };
 
-  if (isFetching) return <LoadingData />;
+  // if (isFetching) return <LoadingData />;
 
   return (
     <div className="space-y-7 max-w-5xl mx-auto p-6">
       <div className="grid grid-cols-1">
-        <div className="bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col justify-between">
-          <Image
-            src={idea?.images?.[0] || "/placeholder.png"}
-            alt={idea?.title || ""}
-            className="w-full h-80 object-cover rounded-md mb-4"
-            width={300}
-            height={300}
-          />
+        <div className="bg-base-300 rounded-xl shadow-md overflow-hidden p-4 flex flex-col justify-between">
+          {isFetching && <LoadingData />}
+
+          {/* image slider here  */}
+          <ImageSlider variant="detail" images={idea ? idea?.images : []} />
+
           <div className="flex-1">
             <h2 className="text-xl font-bold mb-2">{idea?.title}</h2>
-            <p className="text-sm text-gray-600 mb-1">
-              <strong>Problem:</strong> {idea?.problem.slice(0, 60)}...
+            <p className="text-sm  mb-1">
+              <strong>Problem:</strong> {idea?.problem}
             </p>
-            <p className="text-sm text-gray-600 mb-1">
-              <strong>Solution:</strong> {idea?.solution.slice(0, 60)}...
+            <p className="text-sm  mb-1">
+              <strong>Solution:</strong> {idea?.solution}
             </p>
             <p className="text-sm text-gray-500 mb-1">
               <strong>Categories:</strong>{" "}
@@ -171,7 +170,12 @@ const SingleIdea = () => {
               <strong>Status:</strong> {idea?.status}
             </p>
             {/* Icons Section */}
-            <div className="flex items-center space-x-6 mt-4 text-gray-600">
+            <div className="flex items-center space-x-4 mt-4">
+              <p className="">
+                {idea?.votes?.filter((vote) => {
+                  return vote.type === "UPVOTE";
+                })?.length || 0}
+              </p>
               <button
                 onClick={() => handleVote(idea?.id as string, "UPVOTE")}
                 className="flex items-center hover:text-green-600"
@@ -179,6 +183,12 @@ const SingleIdea = () => {
                 <ThumbsUp className="w-5 h-5 mr-1" />
                 <span>Upvote</span>
               </button>
+
+              <p>
+                {idea?.votes?.filter((vote) => {
+                  return vote.type === "DOWNVOTE";
+                })?.length || 0}
+              </p>
               <button
                 onClick={() => handleVote(idea?.id as string, "DOWNVOTE")}
                 className="flex items-center hover:text-red-600"
@@ -186,47 +196,44 @@ const SingleIdea = () => {
                 <ThumbsDown className="w-5 h-5 mr-1" />
                 <span>Downvote</span>
               </button>
-              <button
-                onClick={() => setIsCommentModalOpen(true)}
-                className="flex items-center hover:text-blue-600"
-              >
-                <MessageSquare className="w-5 h-5 mr-1" />
-                <span>Comment</span>
-              </button>
+
+              {/* Comment Modal */}
+              <Modal
+                open={isCommentModalOpen}
+                onOpenChange={setIsCommentModalOpen}
+                title="Comment Form"
+                content={
+                  <>
+                    <form onSubmit={handleCommentSubmit}>
+                      <textarea
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg p-2 mb-4"
+                        rows={4}
+                        placeholder="Write your comment here..."
+                        required
+                      />
+                      <button
+                        type="submit"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  </>
+                }
+                trigger={
+                  <button className="flex items-center hover:text-blue-600">
+                    <MessageSquare className="w-5 h-5 mr-1" />
+                    <span>Comment</span>
+                  </button>
+                }
+              />
             </div>
           </div>
         </div>
       </div>
-      {/* Comment Modal */}
-      {isCommentModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-600"
-              onClick={() => setIsCommentModalOpen(false)}
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h3 className="text-lg font-bold mb-4">Add Comment</h3>
-            <form onSubmit={handleCommentSubmit}>
-              <textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg p-2 mb-4"
-                rows={4}
-                placeholder="Write your comment here..."
-                required
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+
       {/* Display all comments  */}
       <div className="mt-6">
         {comments.length > 0 ? (

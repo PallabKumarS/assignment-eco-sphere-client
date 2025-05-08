@@ -2,17 +2,19 @@
 import { TIdea, TMeta } from "@/types";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
-import { PaginationComponent } from "@/components/shared/Pagination";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
 import { getAllIdeas } from "@/services/IdeaService";
 import IdeaCardM from "@/components/modules/member/IdeaCardM";
 import { Input } from "@/components/ui/input";
 import Container from "@/components/shared/Container";
 import FilterComponent from "@/components/shared/Filter";
+import { Button } from "@/components/ui/button";
+import NoData from "@/components/shared/NoData";
 
 const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
   const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [meta, setMeta] = useState<TMeta>();
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -21,7 +23,7 @@ const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
       const res = await getAllIdeas({
         ...query,
         status: "APPROVED",
-        searchTerm: searchTerm ? searchTerm : "",
+        searchTerm: searchTerm,
       });
       setIdeas(res?.data);
       setMeta(res?.meta);
@@ -31,34 +33,47 @@ const AllIdeas = ({ query }: { query: Record<string, unknown> }) => {
     fetchIdeas();
   }, [query, searchTerm]);
 
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const searchTerm = formData.get("searchTerm");
+    setSearchTerm(searchTerm ? searchTerm.toString() : "");
+  };
+
   return (
     <Container className="">
-      <div className="w-full flex items-center gap-2 justify-center">
-        <Input
-          placeholder="Search ideas..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className=""
-        />
+      <div className="w-full md:flex gap-2 justify-center space-y-4 md:space-y-0 items-center">
+        <form
+          onSubmit={handleSearch}
+          className="flex items-center gap-2 flex-1"
+        >
+          <Input
+            name="searchTerm"
+            placeholder="Search ideas..."
+            className="flex-1"
+          />
+          <Button type="submit">Search</Button>
+        </form>
 
         <FilterComponent />
       </div>
 
       {isFetching && <LoadingData />}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-6 mb-16 p-6">
-        {ideas?.map((idea) => (
-          <IdeaCardM key={idea.id} idea={idea} />
-        ))}
-      </div>
 
-      {ideas?.length === 0 && (
-        <div className="text-center py-10">
-          <p className="">No ideas found</p>
-        </div>
-      )}
+      {ideas?.length === 0 ? (
+        <NoData />
+      ) : (
+        <>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-6 mb-16 p-6">
+            {ideas?.map((idea) => (
+              <IdeaCardM key={idea.id} idea={idea} />
+            ))}
+          </div>
 
-      {meta?.totalPage && meta.totalPage > 0 && (
-        <PaginationComponent meta={meta} />
+          {meta?.totalPage && meta?.totalPage > 0 && (
+            <PaginationComponent meta={meta} />
+          )}
+        </>
       )}
     </Container>
   );

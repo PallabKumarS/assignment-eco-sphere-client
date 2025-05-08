@@ -47,7 +47,7 @@ export function PaginationComponent({ meta }: { meta?: TMeta }) {
           />
         </PaginationItem>
 
-        {Array(meta.totalPage)
+        {Array(meta.totalPage > 0 ? meta.totalPage : 1)
           .fill("*")
           .map((_, index) => (
             <PaginationItem key={index}>

@@ -21,7 +21,7 @@ import {
 } from "@/services/UserService";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
-import { PaginationComponent } from "@/components/shared/Pagination";
+import { PaginationComponent } from "@/components/shared/PaginationComponent";
 import { getAllIdeas } from "@/services/IdeaService";
 
 const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
@@ -40,7 +40,7 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
     setIsFetching(false);
   }, [query]);
 
-  console.log({ideas});
+  console.log({ ideas });
 
   if (isFetching) return <LoadingData />;
 
@@ -151,19 +151,21 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="bg-background/80">
-              {["DRAFT", "PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED"].map((s) => (
-                <DropdownMenuItem
-                  key={s}
-                  onSelect={() =>
-                    handleUserStatusChange(
-                      row.original.id,
-                      s as TUser["status"]
-                    )
-                  }
-                >
-                  {s}
-                </DropdownMenuItem>
-              ))}
+              {["DRAFT", "PENDING", "UNDER_REVIEW", "APPROVED", "REJECTED"].map(
+                (s) => (
+                  <DropdownMenuItem
+                    key={s}
+                    onSelect={() =>
+                      handleUserStatusChange(
+                        row.original.id,
+                        s as TUser["status"]
+                      )
+                    }
+                  >
+                    {s}
+                  </DropdownMenuItem>
+                )
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         );
