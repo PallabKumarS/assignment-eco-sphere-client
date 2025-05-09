@@ -36,7 +36,6 @@ const IdeaManagement = ({
   query,
 }: {
   query: Record<string, unknown>;
-  personal?: boolean;
 }) => {
   const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);

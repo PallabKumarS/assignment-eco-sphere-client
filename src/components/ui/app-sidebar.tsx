@@ -76,12 +76,17 @@ const adminRoutes = [
   },
 ];
 
-// buyer routes
+// member routes
 const memberRoutes = [
   {
     title: "Manage Ideas",
     icon: ColumnsSettings,
     href: "/dashboard/member/manage-idea",
+  },
+  {
+    title: "Payment History",
+    icon: FileSearch,
+    href: "/dashboard/member/payments",
   },
 ];
 

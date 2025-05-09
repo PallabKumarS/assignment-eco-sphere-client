@@ -1,5 +1,6 @@
 import { TComment } from "./comment.types";
-import { TIdea, TPaidIdeaPurchase } from "./idea.types";
+import { TIdea, } from "./idea.types";
+import { TPaidIdeaPurchase } from "./payment.types";
 import { VoteType } from "./vote.types";
 
 export type TUser = {

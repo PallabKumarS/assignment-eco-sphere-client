@@ -1,16 +1,25 @@
-import { FC } from "react";
+"use client";
+
+import { FC, useEffect, useState } from "react";
 import { TIdea, TIdeaStatus } from "@/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
+import { Eye, Lock } from "lucide-react";
 import Link from "next/link";
+import { useAppContext } from "@/providers/ContextProvider";
+import { Modal } from "@/components/shared/Modal";
+import { toast } from "sonner";
+import { createPayment } from "@/services/PaymentService";
 
 interface IdeaCardMProps {
   idea: TIdea;
 }
 
 const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
+  const [hasPurchased, setHasPurchased] = useState<boolean>(false);
+  const { user } = useAppContext();
+
   const {
     id,
     title,
@@ -22,7 +31,24 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     createdAt,
     solution,
     description,
+    paidIdeaPurchase,
   } = idea;
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      if (user) {
+        // Check if current user has purchased this idea
+        if (isPaid && paidIdeaPurchase && paidIdeaPurchase.length > 0) {
+          const purchased = paidIdeaPurchase.some(
+            (purchase) => purchase.userId === user.id
+          );
+          setHasPurchased(purchased);
+        }
+      }
+    };
+
+    fetchCurrentUser();
+  }, [isPaid, paidIdeaPurchase, user]);
 
   const getStatusColor = (status: TIdeaStatus) => {
     switch (status) {
@@ -39,6 +65,38 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     }
   };
 
+  const isContentBlocked = isPaid && !hasPurchased;
+
+  const handlePayment = async () => {
+    const toastId = toast.loading("Starting payment process...");
+
+    const data = {
+      userId: user?.id,
+      ideaId: idea?.id,
+      amount: idea?.price,
+    };
+
+    try {
+      const res = await createPayment(data);
+
+      if (res.success) {
+        toast.success("Payment started successfully", { id: toastId });
+        setTimeout(() => {
+          window.open(res?.data?.paymentUrl, "make your payment");
+        }, 500);
+      } else {
+        toast.error(res.message || "Error starting payment process", {
+          id: toastId,
+        });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error.message || "Error starting payment process", {
+        id: toastId,
+      });
+    }
+  };
+
   return (
     <Card className="overflow-hidden shadow-md hover:shadow-lg transition-shadow">
       <CardContent className="p-4">
@@ -52,14 +110,36 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
         {description && (
           <div className="mb-3">
             <p className="text-sm font-medium">Description:</p>
-            <p className="text-sm line-clamp-2">{description}</p>
+            {isContentBlocked ? (
+              <div className="relative">
+                <p className="text-sm line-clamp-2 blur-sm select-none">
+                  {description}
+                </p>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Lock className="h-4 w-4 text-gray-500" />
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm line-clamp-2">{description}</p>
+            )}
           </div>
         )}
 
         {solution && (
           <div className="mb-3">
             <p className="text-sm font-medium">Solution:</p>
-            <p className="text-sm line-clamp-2">{solution}</p>
+            {isContentBlocked ? (
+              <div className="relative">
+                <p className="text-sm line-clamp-2 blur-sm select-none">
+                  {solution}
+                </p>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Lock className="h-4 w-4 text-gray-500" />
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm line-clamp-2">{solution}</p>
+            )}
           </div>
         )}
 
@@ -92,16 +172,48 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-end items-center">
-        <Link href={`/ideas/${id}`}>
-          <Button
-            size="sm"
-            variant="outline"
-            className="flex items-center gap-1"
-          >
-            <Eye className="h-4 w-4" />
-            <span className="sr-only">View Details</span>
-          </Button>
-        </Link>
+        {isContentBlocked ? (
+          <Modal
+            trigger={
+              <Button
+                size="sm"
+                variant="default"
+                className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
+              >
+                <span>Pay ${price?.toFixed(2)}</span>
+              </Button>
+            }
+            content={
+              <div className="flex flex-col gap-4">
+                <p className="text-sm">
+                  This idea is paid. Please pay to view the content.
+                </p>
+                <div className="flex justify-end">
+                  <Button
+                    size="sm"
+                    variant="default"
+                    className="bg-green-600 hover:bg-green-700"
+                    onClick={() => handlePayment()}
+                  >
+                    Pay ${price?.toFixed(2)}
+                  </Button>
+                </div>
+              </div>
+            }
+            title={`Payment For Idea ${title}`}
+          />
+        ) : (
+          <Link href={`/ideas/${id}`}>
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex items-center gap-1"
+            >
+              <Eye className="h-4 w-4" />
+              <span className="sr-only">View Details</span>
+            </Button>
+          </Link>
+        )}
       </CardFooter>
     </Card>
   );

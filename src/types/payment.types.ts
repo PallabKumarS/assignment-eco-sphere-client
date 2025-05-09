@@ -8,11 +8,11 @@ export type TPaidIdeaPurchase = {
   ideaId: string;
   idea: TIdea;
   paymentId?: string;
-  transactionStatus?: string;
+  amount: number;
+  transactionStatus?: "PENDING" | "PAID" | "CANCELLED";
   paymentUrl?: string;
-  bankStatus?: string;
-  spCode?: string;
-  spMessage?: string;
-  method?: string;
+  transactionId?: string;
+  paidAt: Date;
+  method: string;
   createdAt: Date;
 };

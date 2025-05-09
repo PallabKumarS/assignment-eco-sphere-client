@@ -3,7 +3,6 @@
 
 import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
-import { FieldValues } from "react-hook-form";
 
 // Get all payments
 export const getAllPayments = async (query?: Record<string, unknown>) => {
@@ -30,17 +29,14 @@ export const getAllPayments = async (query?: Record<string, unknown>) => {
 export const getSinglePayment = async (paymentId: string) => {
   const token = await getValidToken();
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/payments/${paymentId}`,
-      {
-        next: {
-          tags: ["payment"],
-        },
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_API}/payments/${paymentId}`, {
+      next: {
+        tags: ["payment"],
+      },
+      headers: {
+        Authorization: token,
+      },
+    });
     return await res.json();
   } catch (error: any) {
     return error;
@@ -48,11 +44,11 @@ export const getSinglePayment = async (paymentId: string) => {
 };
 
 // Create payment
-export const createPayment = async (paymentData: FieldValues): Promise<any> => {
+export const createPayment = async (paymentData: any): Promise<any> => {
   const token = await getValidToken();
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/payments`, {
+    const res = await fetch(`${process.env.BASE_API}/payments`, {
       method: "POST",
       body: JSON.stringify(paymentData),
       headers: {
@@ -62,6 +58,33 @@ export const createPayment = async (paymentData: FieldValues): Promise<any> => {
     });
 
     revalidateTag("payments");
+    revalidateTag("payment");
+
+    return await res.json();
+  } catch (error: any) {
+    return error;
+  }
+};
+
+// verify payment
+export const verifyPayment = async (paymentId: string): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(
+      `${process.env.BASE_API}/payments/${paymentId}/verify`,
+      {
+        method: "POST",
+        body: JSON.stringify({}),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+
+    revalidateTag("payments");
+    revalidateTag("payment");
 
     return await res.json();
   } catch (error: any) {
@@ -74,17 +97,16 @@ export const deletePayment = async (paymentId: string): Promise<any> => {
   const token = await getValidToken();
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/payments/${paymentId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_API}/payments/${paymentId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    });
 
     revalidateTag("payments");
+    revalidateTag("payment");
+
     return await res.json();
   } catch (error: any) {
     return error;
