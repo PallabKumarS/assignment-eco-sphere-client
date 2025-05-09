@@ -6,7 +6,7 @@ import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import {  TCategory, TIdea } from "@/types";
+import { TCategory, TIdea } from "@/types";
 
 type Category = {
   id: string;
@@ -73,14 +73,11 @@ const EditIdeaModal: React.FC<EditIdeaModalProps> = ({
     <Dialog
       open={isOpen}
       onClose={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center"
     >
-      <div className="fixed inset-0 bg-black bg-opacity-50" />
-      <Dialog.Panel className="relative bg-white p-6 rounded-lg shadow-xl w-full max-w-xl">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-        >
+      <div className="fixed inset-0 bg-opacity-50" />
+      <Dialog.Panel className="relative p-6 rounded-lg shadow-xl w-full max-w-xl">
+        <button onClick={onClose} className="absolute top-2 right-2">
           <X />
         </button>
         <Dialog.Title className="text-xl font-semibold mb-4">
@@ -90,27 +87,27 @@ const EditIdeaModal: React.FC<EditIdeaModalProps> = ({
           <input
             {...register("title", { required: true })}
             placeholder="Title"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("problem", { required: true })}
             placeholder="Problem"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("solution", { required: true })}
             placeholder="Solution"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("description", { required: true })}
             placeholder="Description"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <input
             {...register("images", { required: true })}
             placeholder="Image URLs (comma separated)"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <div className="flex items-center gap-2">
             <input
@@ -127,13 +124,13 @@ const EditIdeaModal: React.FC<EditIdeaModalProps> = ({
               type="number"
               step="0.01"
               placeholder="Price"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border rounded"
             />
           )}
           <select
             {...register("categories", { required: true })}
             multiple
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           >
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
@@ -143,7 +140,7 @@ const EditIdeaModal: React.FC<EditIdeaModalProps> = ({
           </select>
           <button
             type="submit"
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="bg-green-600  px-4 py-2 rounded hover:bg-green-700"
           >
             Update Idea
           </button>

@@ -7,7 +7,7 @@ const authRoutes = ["/login"];
 
 const roleBasedPrivateRoutes = {
   ADMIN: [/^\/dashboard\/admin/],
-  MEMBER: [/^\/dashboard\/member/],
+  MEMBER: [/^\/dashboard\/member/, /^\/ideas/, /^\/ideas\/[\w-]+$/],
 };
 
 const sharedRoutes = [/^\/dashboard\/settings/, /^\/dashboard\/profile/];
@@ -34,6 +34,8 @@ export const middleware = async (request: NextRequest) => {
   if (userInfo?.role && roleBasedPrivateRoutes[userInfo.role as Role]) {
     const routes = roleBasedPrivateRoutes[userInfo.role as Role];
 
+    console.log(routes);
+
     if (routes.some((route) => pathname.match(route))) {
       return NextResponse.next();
     }
@@ -43,5 +45,5 @@ export const middleware = async (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/dashboard", "/dashboard/:path*"],
+  matcher: ["/dashboard", "/dashboard/:path*", "/ideas", "/ideas/:path*"],
 };

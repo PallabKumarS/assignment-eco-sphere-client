@@ -38,7 +38,10 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     const fetchCurrentUser = async () => {
       if (user) {
         // Check if current user has purchased this idea
-        if (isPaid && paidIdeaPurchase && paidIdeaPurchase.length > 0) {
+        if (idea?.authorId === user.id) {
+          setHasPurchased(true);
+          return;
+        } else if (isPaid && paidIdeaPurchase && paidIdeaPurchase.length > 0) {
           const purchased = paidIdeaPurchase.some(
             (purchase) => purchase.userId === user.id
           );
@@ -48,7 +51,7 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     };
 
     fetchCurrentUser();
-  }, [isPaid, paidIdeaPurchase, user]);
+  }, [isPaid, paidIdeaPurchase, user, idea?.authorId]);
 
   const getStatusColor = (status: TIdeaStatus) => {
     switch (status) {

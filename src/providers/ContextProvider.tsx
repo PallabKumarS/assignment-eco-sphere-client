@@ -28,15 +28,15 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initialize = async () => {
-      const newToken = await getToken();
+      const token = await getToken();
       if (token) {
-        setToken(newToken as string);
+        setToken(token);
 
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -57,7 +57,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     initialize();
-  }, [token]);
+  }, []);
 
   const logout = () => {
     setUser(null);

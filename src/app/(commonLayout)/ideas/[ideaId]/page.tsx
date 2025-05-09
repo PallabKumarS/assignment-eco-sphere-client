@@ -5,8 +5,8 @@ import { TComment, TIdea } from "@/types";
 import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
 import { getSingleIdea } from "@/services/IdeaService";
-import { useParams } from "next/navigation";
-import { ThumbsUp, ThumbsDown, MessageSquare} from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { voteIdea } from "@/services/VoteService";
 import {
@@ -29,8 +29,10 @@ const SingleIdea = () => {
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<TComment[]>([]);
+  const [hasPurchased, setHasPurchased] = useState<boolean>(false);
   const { user } = useAppContext();
   const currentUserId = user?.id;
+  const router = useRouter();
 
   const fetchComments = async () => {
     const res = await getAllComments(ideaId as string); // create this service
@@ -43,8 +45,28 @@ const SingleIdea = () => {
       setIdea(res?.data);
     };
 
+    const fetchCurrentUser = async () => {
+      if (user) {
+        // Check if current user has purchased this idea
+        if (idea?.authorId === user.id) {
+          setHasPurchased(true);
+          return;
+        } else if (
+          idea?.isPaid &&
+          idea?.paidIdeaPurchase &&
+          idea?.paidIdeaPurchase?.length > 0
+        ) {
+          const purchased = idea?.paidIdeaPurchase?.some(
+            (purchase) => purchase.userId === user.id
+          );
+          setHasPurchased(purchased);
+        }
+      }
+    };
+
     fetchComments();
     fetchIdea();
+    fetchCurrentUser();
     setIsFetching(false);
   }, [ideaId]);
 
@@ -139,7 +161,10 @@ const SingleIdea = () => {
     }
   };
 
-  // if (isFetching) return <LoadingData />;
+  if (!hasPurchased) {
+    router.push("/ideas");
+    toast.error("You need to purchase this idea to view it.");
+  }
 
   return (
     <div className="space-y-7 max-w-5xl mx-auto p-6">
