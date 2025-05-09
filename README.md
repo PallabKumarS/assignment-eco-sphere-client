@@ -128,4 +128,4 @@ light and dark modes through the next-themes package.
 
 [Frontend Live Link](https://pks-eco-sphere-client.vercel.app)
 
-[GitHub Repository](https://github.com/theMorshed/assignment-eco-sphere-client)
+[GitHub Repository Server](https://github.com/PallabKumarS/assignment-eco-sphere-server)
