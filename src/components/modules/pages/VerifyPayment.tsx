@@ -27,6 +27,7 @@ import { TPaidIdeaPurchase } from "@/types";
 import { verifyPayment } from "@/services/PaymentService";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import { useAppContext } from "@/providers/ContextProvider";
 
 const StatusIcon = ({ status }: { status: string }) => {
   switch (status) {
@@ -44,13 +45,16 @@ const StatusIcon = ({ status }: { status: string }) => {
 export default function VerifyPayment({ paymentId }: { paymentId: string }) {
   const [paymentData, setPaymentData] = useState<TPaidIdeaPurchase>();
   const [isFetching, setIsFetching] = useState(true);
+  const { user } = useAppContext();
 
   useEffect(() => {
     const toastId = toast.loading("Verifying payment, please wait...");
 
     const verifyPaymentData = async () => {
       try {
-        const res = await verifyPayment(paymentId);
+        const res = await verifyPayment(paymentId, {
+          userId: user?.id as string,
+        });
         if (res.success) {
           toast.success(res.message, { id: toastId });
           setPaymentData(res.data as TPaidIdeaPurchase);
@@ -68,7 +72,7 @@ export default function VerifyPayment({ paymentId }: { paymentId: string }) {
     };
 
     verifyPaymentData();
-  }, [paymentId]);
+  }, [paymentId, user?.id]);
 
   const getStatusVariant = () => {
     switch (paymentData?.transactionStatus) {

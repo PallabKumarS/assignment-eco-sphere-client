@@ -74,9 +74,9 @@ const IdeaCardM: FC<IdeaCardMProps> = ({ idea }) => {
     const toastId = toast.loading("Starting payment process...");
 
     const data = {
-      userId: user?.id,
       ideaId: idea?.id,
       amount: idea?.price,
+      userId: user?.id,
     };
 
     try {

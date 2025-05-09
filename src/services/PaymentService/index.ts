@@ -67,7 +67,10 @@ export const createPayment = async (paymentData: any): Promise<any> => {
 };
 
 // verify payment
-export const verifyPayment = async (paymentId: string): Promise<any> => {
+export const verifyPayment = async (
+  paymentId: string,
+  data: { userId: string }
+): Promise<any> => {
   const token = await getValidToken();
 
   try {
@@ -75,7 +78,7 @@ export const verifyPayment = async (paymentId: string): Promise<any> => {
       `${process.env.BASE_API}/payments/${paymentId}/verify`,
       {
         method: "POST",
-        body: JSON.stringify({}),
+        body: JSON.stringify(data),
         headers: {
           "Content-type": "application/json",
           Authorization: token,
