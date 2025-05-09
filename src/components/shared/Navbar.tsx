@@ -28,7 +28,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAppContext } from "@/providers/ContextProvider";
 import { config } from "@/middleware";
-import Container from "./Container";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

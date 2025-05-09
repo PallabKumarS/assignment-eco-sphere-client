@@ -21,11 +21,6 @@ const Footer = () => {
     { href: "/about", label: "About Us" },
   ];
 
-  const legalLinks = [
-    { href: "/privacy", label: "Privacy Policy" },
-    { href: "/terms", label: "Terms of Use" },
-  ];
-
   const socialLinks = [
     { href: "#", icon: Facebook, label: "Facebook" },
     { href: "#", icon: Instagram, label: "Instagram" },

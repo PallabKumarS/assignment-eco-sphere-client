@@ -28,14 +28,15 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
+
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initialize = async () => {
-      const token = await getToken();
+      const newToken = await getToken();
       if (token) {
-        setToken(token);
+        setToken(newToken as string);
 
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -56,7 +57,7 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     initialize();
-  }, []);
+  }, [token]);
 
   const logout = () => {
     setUser(null);

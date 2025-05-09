@@ -21,7 +21,6 @@ import ButtonLoader from "../shared/ButtonLoader";
 import { useState } from "react";
 import { loginUser } from "@/services/AuthService";
 import { useAppContext } from "@/providers/ContextProvider";
-import clsx from "clsx";
 
 const formSchema = z.object({
   email: z.string(),
