@@ -14,7 +14,7 @@ export const getAllComments = async (ideaId: string) => {
     });
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -39,7 +39,7 @@ export const commentIdea = async (
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+    return error;
   }
 };
 
@@ -64,7 +64,7 @@ export const updateComment = async (
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+    return error;
   }
 };
 
@@ -85,7 +85,7 @@ export const deleteComment = async (commentId: string): Promise<any> => {
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+    return error;
   }
 };
 
@@ -113,6 +113,6 @@ export const replyToComment = async (
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Failed to reply to comment");
+    return error;
   }
 };

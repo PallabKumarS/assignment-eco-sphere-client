@@ -166,6 +166,6 @@ export const deleteUser = async (id: string): Promise<any> => {
 
     return await res.json();
   } catch (error: any) {
-    return Error(error);
+    return error;
   }
 };

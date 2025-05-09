@@ -38,7 +38,7 @@ export const getAll${capitalize(moduleName)}s = async () => {
     });
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -48,7 +48,7 @@ export const getSingle${capitalize(
 )} = async (${moduleName.toLowerCase()}Id: string) => {
   const token = await getValidToken();
   try {
-    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s/${moduleName.toLowerCase()}Id\`, {
+    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s/\${${moduleName.toLowerCase()}Id}\`, {
       next: {
         tags: ["${moduleName}"],
       },
@@ -58,7 +58,7 @@ export const getSingle${capitalize(
     });
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -84,7 +84,7 @@ export const create${capitalize(
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+   return error;
   }
 };
 
@@ -105,7 +105,7 @@ export const delete${capitalize(
     revalidateTag("${moduleName}s");
     return await res.json();
   } catch (error: any) {
-    return Error(error);
+    return error;
   }
 };`;
 

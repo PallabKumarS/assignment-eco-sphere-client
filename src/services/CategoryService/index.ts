@@ -27,7 +27,7 @@ export const getAllCategories = async (query?: Record<string, unknown>) => {
     );
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -48,7 +48,7 @@ export const getSingleCategory = async (categoryId: string) => {
     );
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -72,7 +72,7 @@ export const createCategory = async (
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+    return error;
   }
 };
 
@@ -100,7 +100,7 @@ export const updateCategory = async (
 
     return await res.json();
   } catch (error: any) {
-    return Error(error);
+    return error;
   }
 };
 
@@ -122,6 +122,6 @@ export const deleteCategory = async (categoryId: string): Promise<any> => {
     revalidateTag("categories");
     return await res.json();
   } catch (error: any) {
-    return Error(error);
+    return error;
   }
 };

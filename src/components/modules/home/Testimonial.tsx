@@ -6,13 +6,13 @@ interface TestimonialsSectionProps {
 
 const TestimonialsSection = ({ topIdeas }: TestimonialsSectionProps) => {
   const sortedIdeas = topIdeas
-    ?.sort((a, b) => b._count.votes - a._count.votes)
+    ?.sort((a, b) => b.votes.length - a.votes.length)
     ?.slice(0, 3);
 
   return (
-    <section className="py-12 bg-gray-50 rounded-lg my-8">
+    <section className="py-12  rounded-lg my-8">
       <h2 className="text-3xl font-bold mb-2 text-center">Top Rated Ideas</h2>
-      <p className="text-center text-gray-600 mb-8">
+      <p className="text-center mb-8">
         Most popular ideas based on community votes
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -43,7 +43,7 @@ const isValidImageUrl = (url: string) => {
 
 const TestimonialCard = ({ idea }: TestimonialCardProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
+    <div className=" rounded-lg shadow-md p-6 flex flex-col">
       <div className="flex items-center mb-4">
         <div className="relative h-16 w-16 rounded-full overflow-hidden mr-4">
           <Image
@@ -59,7 +59,7 @@ const TestimonialCard = ({ idea }: TestimonialCardProps) => {
         </div>
         <div>
           <h3 className="font-semibold text-lg">{idea.title}</h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm">
             {idea.categories.map((category) => (
               <span key={category.id}>{category.name}</span>
             ))}
@@ -73,7 +73,7 @@ const TestimonialCard = ({ idea }: TestimonialCardProps) => {
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <span className="text-green-600 font-semibold">
-            {idea._count.votes} votes
+            {idea.votes.length} votes
           </span>
         </div>
         <Link href={`/ideas/${idea.id}`}>

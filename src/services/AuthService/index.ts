@@ -61,7 +61,6 @@ export const registerUser = async (data: {
 
     return resData;
   } catch (error) {
-    console.error("Error registering user:", error);
     return error;
   }
 };

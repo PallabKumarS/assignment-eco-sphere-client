@@ -44,7 +44,7 @@ export const getPersonalIdeas = async (query?: Record<string, unknown>) => {
     );
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -62,7 +62,7 @@ export const getSingleIdea = async (ideaId: string) => {
     });
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -84,7 +84,7 @@ export const createIdea = async (ideaData: FieldValues): Promise<any> => {
 
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Something went wrong");
+    return error;
   }
 };
 
@@ -117,7 +117,7 @@ export const updateIdeaStatus = async (
 
     return await res.json();
   } catch (error: any) {
-    return Error(error.message);
+    return error;
   }
 };
 
@@ -157,6 +157,6 @@ export const deleteIdea = async (ideaId: string): Promise<any> => {
     revalidateTag("ideas");
     return await res.json();
   } catch (error: any) {
-    return Error(error);
+    return error;
   }
 };

@@ -1,5 +1,6 @@
 import { TCategory } from "./category.types";
 import { TComment } from "./comment.types";
+import { TPaidIdeaPurchase } from "./payment.types";
 import { TUser } from "./user.types";
 import { TVote } from "./vote.types";
 
@@ -22,19 +23,8 @@ export type TIdea = {
   paidIdeaPurchase: TPaidIdeaPurchase[];
   createdAt: Date;
   updatedAt: Date;
-  _count: {
-    votes: number;
-    comments: number;
-  }
 };
-export type TPaidIdeaPurchase = {
-  id: string;
-  userId: string;
-  user: TUser;
-  ideaId: string;
-  idea: TIdea;
-  createdAt: Date;
-};
+
 
 export enum TIdeaStatus {
   DRAFT = "DRAFT",

@@ -39,7 +39,7 @@ export default FeaturedIdeas;
 
 const IdeaCard = ({ idea }: IdeaCardProps) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02]">
+    <div className="rounded-lg shadow-md overflow-hidden transition-transform hover:scale-[1.02]">
       <div className="relative h-48 w-full">
         <ImageSlider variant="card" images={idea.images} />
       </div>
