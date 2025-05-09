@@ -106,7 +106,7 @@ export default function VerifyPayment({ paymentId }: { paymentId: string }) {
           <LoadingData />
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-6">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(600px,100%),1fr))] gap-6">
           {/* Payment Status Card */}
           <Card className="shadow-md hover:shadow-lg transition-shadow border-border">
             <CardHeader>
