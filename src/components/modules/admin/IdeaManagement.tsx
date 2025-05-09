@@ -105,7 +105,6 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
               </SelectTrigger>
               <SelectContent className="bg-background">
                 <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="DRAFT">Draft</SelectItem>
                 <SelectItem value="PENDING">Pending</SelectItem>
                 <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
                 <SelectItem value="APPROVED">Approved</SelectItem>

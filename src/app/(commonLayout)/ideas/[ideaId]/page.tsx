@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import LoadingData from "@/components/shared/LoadingData";
 import { getSingleIdea } from "@/services/IdeaService";
 import { useParams } from "next/navigation";
-import { ThumbsUp, ThumbsDown, MessageSquare, X } from "lucide-react";
+import { ThumbsUp, ThumbsDown, MessageSquare} from "lucide-react";
 import { toast } from "sonner";
 import { voteIdea } from "@/services/VoteService";
 import {

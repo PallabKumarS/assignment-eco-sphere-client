@@ -22,6 +22,10 @@ export type TIdea = {
   paidIdeaPurchase: TPaidIdeaPurchase[];
   createdAt: Date;
   updatedAt: Date;
+  _count: {
+    votes: number;
+    comments: number;
+  }
 };
 export type TPaidIdeaPurchase = {
   id: string;

@@ -5,6 +5,10 @@ interface TestimonialsSectionProps {
 }
 
 const TestimonialsSection = ({ topIdeas }: TestimonialsSectionProps) => {
+  const sortedIdeas = topIdeas
+    ?.sort((a, b) => b._count.votes - a._count.votes)
+    ?.slice(0, 3);
+
   return (
     <section className="py-12 bg-gray-50 rounded-lg my-8">
       <h2 className="text-3xl font-bold mb-2 text-center">Top Rated Ideas</h2>
@@ -12,7 +16,7 @@ const TestimonialsSection = ({ topIdeas }: TestimonialsSectionProps) => {
         Most popular ideas based on community votes
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {topIdeas?.slice(0, 3).map((idea) => (
+        {sortedIdeas?.map((idea) => (
           <TestimonialCard key={idea.id} idea={idea} />
         ))}
       </div>
@@ -63,13 +67,13 @@ const TestimonialCard = ({ idea }: TestimonialCardProps) => {
         </div>
       </div>
       <p className="text-gray-600 mb-4 flex-grow">
-        {idea.description?.substring(0, 150)}
-        {idea.description?.length > 150 ? "..." : ""}
+        {idea.description?.substring(0, 100)}
+        {idea.description?.length > 100 ? "..." : ""}
       </p>
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <span className="text-green-600 font-semibold">
-            {idea.votes?.length || 0} votes
+            {idea._count.votes} votes
           </span>
         </div>
         <Link href={`/ideas/${idea.id}`}>

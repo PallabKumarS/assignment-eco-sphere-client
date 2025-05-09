@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -17,10 +18,15 @@ type CreateIdeaModalProps = {
   isOpen: boolean;
   onClose: () => void;
   categories: Category[];
-  onCreate: (data: any) => void; // ✅ This line must exist
+  onCreate: (data: any) => void;
 };
 
-const CreateIdeaModal: React.FC<CreateIdeaModalProps> = ({ isOpen, onClose, categories, onCreate }) => {
+const CreateIdeaModal: React.FC<CreateIdeaModalProps> = ({
+  isOpen,
+  onClose,
+  categories,
+  onCreate,
+}) => {
   const { register, handleSubmit, reset } = useForm();
   const [isPaid, setIsPaid] = useState(false);
 
@@ -30,7 +36,7 @@ const CreateIdeaModal: React.FC<CreateIdeaModalProps> = ({ isOpen, onClose, cate
         ...data,
         isPaid,
         price: isPaid ? parseFloat(data.price) : 0,
-        images: data.images.split(',').map((url: string) => url.trim()),
+        images: data.images.split(",").map((url: string) => url.trim()),
         categories: Array.isArray(data.categories)
           ? data.categories
           : [data.categories], // ensures array
@@ -39,50 +45,52 @@ const CreateIdeaModal: React.FC<CreateIdeaModalProps> = ({ isOpen, onClose, cate
       onCreate(newIdea.data); // pass to parent
       reset();
       onClose();
-      toast.success('Idea created successfully');
+      toast.success("Idea created successfully");
       window.location.reload();
     } catch (error: any) {
       console.error("Error creating idea:", error.message);
-      // Optionally add toast here
     }
   };
-  
+
   return (
-    <Dialog open={isOpen} onClose={onClose} className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black bg-opacity-50" aria-hidden="true" />
-      <Dialog.Panel className="relative bg-white p-6 rounded-lg shadow-xl w-full max-w-xl">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
-        >
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      className="fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center"
+    >
+      <div className="fixed inset-0 bg-opacity-50" aria-hidden="true" />
+      <Dialog.Panel className="relative  p-6 rounded-lg shadow-xl w-full max-w-xl">
+        <button onClick={onClose} className="absolute top-2 right-2">
           <X />
         </button>
-        <Dialog.Title className="text-xl font-semibold mb-4">Create New Idea</Dialog.Title>
+        <Dialog.Title className="text-xl font-semibold mb-4">
+          Create New Idea
+        </Dialog.Title>
         <form onSubmit={handleSubmit(handleCreate)} className="space-y-4">
           <input
             {...register("title", { required: true })}
             placeholder="Title"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("problem", { required: true })}
             placeholder="Problem"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("solution", { required: true })}
             placeholder="Solution"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <textarea
             {...register("description", { required: true })}
             placeholder="Description"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <input
             {...register("images", { required: true })}
             placeholder="Image URLs (comma separated)"
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           />
           <div className="flex items-center gap-2">
             <input
@@ -99,13 +107,13 @@ const CreateIdeaModal: React.FC<CreateIdeaModalProps> = ({ isOpen, onClose, cate
               type="number"
               step="0.01"
               placeholder="Price"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border rounded"
             />
           )}
           <select
             {...register("categories", { required: true })}
             multiple
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border rounded"
           >
             {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>

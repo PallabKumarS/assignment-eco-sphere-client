@@ -21,6 +21,5 @@ export function buildCommentTree(flatComments: TComment[]): TComment[] {
       tree.push(commentMap[comment.id]);
     }
   });
-
   return tree;
 }

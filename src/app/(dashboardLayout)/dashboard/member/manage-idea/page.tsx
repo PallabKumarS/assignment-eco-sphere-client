@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import CreateIdeaModal from "@/components/modules/idea/CreateIdeaModal";
@@ -67,7 +68,6 @@ const IdeaPage = () => {
       setIsEditModalOpen(false);
 
       toast.success("Idea updated successfully");
-      window.location.reload();
     } catch (err) {
       console.error("Update failed", err);
     }
@@ -97,7 +97,6 @@ const IdeaPage = () => {
         )
       );
       toast.success("Idea status updated successfully");
-      // window.location.reload();
     } catch (err) {
       console.error("Update failed", err);
     }
@@ -130,9 +129,9 @@ const IdeaPage = () => {
         idea={editingIdea}
         onUpdate={handleUpdate}
       />
-      <table className="min-w-full bg-white rounded-lg shadow-md">
+      <table className="min-w-full rounded-lg shadow-md">
         <thead>
-          <tr className="bg-gray-100 text-left">
+          <tr className="text-left">
             <th className="py-3 px-4">Title</th>
             <th className="py-3 px-4">Description</th>
             <th className="py-3 px-4">Categories</th>
@@ -150,14 +149,17 @@ const IdeaPage = () => {
                 {getCategoryNamesFromIdea(idea.categories)}
               </td>
               <td className="py-2 px-4">
+                <h3 className="rounded px-2 py-1 mb-2">{idea.status}</h3>
+
                 <select
-                  className="border border-gray-300 rounded px-2 py-1"
-                  value={idea.status}
+                  className="border rounded px-2 py-1"
                   onChange={(e) =>
                     handleStatusChange(e.target.value as TIdeaStatus, idea.id)
                   }
                 >
-                  <option value={idea.status}>{idea.status}</option>
+                  {idea.status !== "DRAFT" && (
+                    <option value="DRAFT">DRAFT</option>
+                  )}
                   {idea.status !== "PENDING" && (
                     <option value="PENDING">PENDING</option>
                   )}
@@ -175,15 +177,17 @@ const IdeaPage = () => {
               <td className="py-2 px-4 text-center">
                 <div className="flex items-center justify-center gap-2">
                   <button
+                    disabled={idea.status !== "DRAFT"}
                     onClick={() => handleEdit(idea.id)}
-                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
                     title="Edit"
                   >
                     <Pencil size={18} />
                   </button>
                   <button
+                    disabled={idea.status !== "DRAFT"}
                     onClick={() => handleDelete(idea.id)}
-                    className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="p-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
                     title="Delete"
                   >
                     <Trash size={18} />

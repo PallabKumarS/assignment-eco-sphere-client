@@ -11,7 +11,13 @@ type Props = {
   currentUserId: string;
 };
 
-export default function CommentItem({ comment, onReply, onUpdate, onDelete, currentUserId }: Props) {
+export default function CommentItem({
+  comment,
+  onReply,
+  onUpdate,
+  onDelete,
+  currentUserId,
+}: Props) {
   const [showReply, setShowReply] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -42,21 +48,33 @@ export default function CommentItem({ comment, onReply, onUpdate, onDelete, curr
               onChange={(e) => setEditText(e.target.value)}
               className="border p-1 w-full"
             />
-            <button onClick={handleUpdate} className="text-blue-600">Save</button>
+            <button onClick={handleUpdate} className="text-blue-600">
+              Save
+            </button>
           </>
         ) : (
           <span>{comment.content}</span>
         )}
       </div>
       <div className="text-xs text-gray-500">
-        { user?.role === 'MEMBER' && (
+        {user?.role === "MEMBER" && (
           <button onClick={() => setShowReply(!showReply)}>Reply</button>
         )}
-        
+
         {isAuthor && (
           <>
-            <button onClick={() => setIsEditing(!isEditing)} className="ml-2 text-yellow-600">Edit</button>
-            <button onClick={() => onDelete(comment.id)} className="ml-2 text-red-600">Delete</button>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className="ml-2 text-yellow-600"
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => onDelete(comment.id)}
+              className="ml-2 text-red-600"
+            >
+              Delete
+            </button>
           </>
         )}
       </div>
@@ -68,7 +86,9 @@ export default function CommentItem({ comment, onReply, onUpdate, onDelete, curr
             onChange={(e) => setReplyText(e.target.value)}
             className="border p-1 w-full"
           />
-          <button onClick={handleReply} className="text-blue-600 mt-1">Submit</button>
+          <button onClick={handleReply} className="text-blue-600 mt-1">
+            Submit
+          </button>
         </div>
       )}
 

@@ -178,7 +178,6 @@ const IdeaCard: FC<IdeaCardProps> = ({ idea }) => {
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-background/80">
-              <SelectItem value={TIdeaStatus.DRAFT}>Draft</SelectItem>
               <SelectItem value={TIdeaStatus.PENDING}>Pending</SelectItem>
               <SelectItem value={TIdeaStatus.UNDER_REVIEW}>
                 Under Review

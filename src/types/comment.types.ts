@@ -10,7 +10,7 @@ export type TComment = {
   idea: TIdea;
   parentId?: string;
   parent?: Comment;
-  replies: Comment[];
+  replies: TComment[];
   createdAt: Date;
   updatedAt: Date;
 };
