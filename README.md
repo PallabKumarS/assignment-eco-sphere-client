@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eco Sphere Client
 
-## Getting Started
+A modern web application built with **Next.js**, **React**, **TypeScript**, and
+**Tailwind CSS** for browsing, submitting, and purchasing eco-friendly ideas.
 
-First, run the development server:
+---
+
+## 🧰 Tech Stack
+
+- **Framework:** Next.js 15
+- **Language:** TypeScript
+- **UI Library:** React 19
+- **Styling:** Tailwind CSS 4
+- **State Management:** Redux Toolkit
+- **Form Handling:** React Hook Form + Zod
+- **UI Components:** Radix UI + Shadcn/UI
+- **Authentication:** JWT
+
+---
+
+## 🔧 Setup Guide
+
+### Prerequisites
+
+- Node.js (v18+ recommended)
+- Package Manager (npm, yarn, or bun)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/theMorshed/assignment-eco-sphere-client.git
+cd assignment-eco-sphere-client
+```
+
+### 2. Install Dependencies
+
+To install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+bun install
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
 # or
 yarn dev
 # or
-pnpm dev
-# or
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the
+result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file and configure the following:
 
-## Learn More
+```
+BASE_API="your backend api url"
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 📋 Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Authentication:** Register, login, and profile management
+- **Idea Management:** Browse, submit, and purchase eco-friendly ideas
+- **Dashboard:** Separate dashboards for members and admins
+- **Payment Integration:** Secure payment processing for idea purchases
+- **Responsive Design:** Works on all devices from mobile to desktop
+- **Dark/Light Mode:** Theme support for user preference
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Available Scripts
 
-## Deploy on Vercel
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint to check code quality
+- `npm run create:module` - Generate new module boilerplate
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+├── public/              # Static assets
+├── src/
+│   ├── app/             # Next.js app router pages
+│   ├── components/      # React components
+│   │   ├── modules/     # Feature-specific components
+│   │   ├── shared/      # Reusable components
+│   │   └── ui/          # UI components (shadcn/ui)
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions
+│   ├── scripts/         # Build and utility scripts
+│   ├── services/        # API service functions
+│   └── types/           # TypeScript type definitions
+├── .env.local           # Environment variables
+├── next.config.js       # Next.js configuration
+├── tailwind.config.js   # Tailwind CSS configuration
+└── tsconfig.json        # TypeScript configuration
+```
+
+## 🔒 Authentication
+
+The application uses JWT-based authentication with token refresh capabilities.
+Protected routes are handled through middleware that verifies the user's
+authentication status and role.
+
+## 🎨 UI Components
+
+This project uses a combination of Radix UI primitives and Shadcn/UI components
+for a consistent and accessible user interface. The design system supports both
+light and dark modes through the next-themes package.
+
+## 👥 Contributors
+
+- [Pallab Kumar Sarker](https://github.com/PallabKumarS)
+- [Manjur Morshed](https://github.com/theMorshed)
+
+---
+
+---
+
+## Live Site
+
+[Frontend Live Link](https://pks-eco-sphere-client.vercel.app)
+
+[GitHub Repository](https://github.com/theMorshed/assignment-eco-sphere-client)
