@@ -4,86 +4,105 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Main Background and Text */
-  --background: hsl(0, 0%, 98%); /* Softer, lighter off-white */
-  --foreground: hsl(0, 0%, 20%); /* Slightly lighter charcoal */
 
-  /* Card and Surface Colors */
-  --card: hsl(0, 0%, 95%); /* Soft silver-gray */
-  --card-foreground: hsl(0, 0%, 25%); /* Muted charcoal */
-
-  /* Primary Color (Main Brand Color) */
-  --primary: hsl(0, 0%, 60%); /* Soft silver */
-  --primary-foreground: hsl(0, 0%, 100%); /* Pure white */
-
-  /* Secondary Color */
-  --secondary: hsl(0, 0%, 70%); /* Muted, soft gray */
-  --secondary-foreground: hsl(0, 0%, 100%); /* Pure white */
-
-  /* Accent Colors */
-  --accent: hsl(0, 0%, 65%); /* Subtle light gray */
-  --accent-foreground: hsl(0, 0%, 100%); /* Pure white */
-
-  /* Muted Colors */
-  --muted: hsl(0, 0%, 88%); /* Light silver-gray */
-  --muted-foreground: hsl(0, 0%, 40%); /* Soft gray */
-
-  /* Destructive (Error) Colors */
-  --destructive: hsl(0, 0%, 50%); /* Soft medium gray */
-  --destructive-foreground: hsl(0, 0%, 100%); /* Pure white */
-
-  /* Border and Input Colors */
-  --border: hsl(0, 0%, 80%); /* Lighter silver-gray */
-  --input: hsl(0, 0%, 85%); /* Soft silver */
-  --ring: hsl(0, 0%, 60%); /* Matching primary */
-
-  /* Additional Chart and Visualization Colors */
-  --chart-1: hsl(0, 0%, 90%); /* Very soft silver */
-  --chart-2: hsl(0, 0%, 65%); /* Light gray */
-  --chart-3: hsl(0, 0%, 60%); /* Soft silver */
-  --chart-4: hsl(0, 0%, 70%); /* Muted light gray */
-
-  /* Sidebar Colors */
-  --sidebar: hsl(0, 0%, 95%); /* Soft silver-gray */
-  --sidebar-foreground: hsl(0, 0%, 25%); /* Muted charcoal */
-  --sidebar-accent: hsl(0, 0%, 60%); /* Soft silver */
+  --background: hsl(0.00 0.00% 100.00%);
+  --foreground: hsl(240.00 11.63% 8.43%);
+  
+  --primary: hsl(237.55 63.64% 84.90%);
+  --primary-foreground: hsl(240.00 11.63% 8.43%);
+  
+  --card: hsl(240.00 50.00% 99.22%);
+  --card-foreground: hsl(240.00 11.63% 8.43%);
+  
+  --popover: hsl(0.00 0.00% 100.00%);
+  --popover-foreground: hsl(240.00 11.63% 8.43%);
+  
+  --secondary: hsl(240.00 63.64% 97.84%);
+  --secondary-foreground: hsl(0.00 0.00% 0.00%);
+  
+  --muted: hsl(240.00 71.43% 98.63%);
+  --muted-foreground: hsl(0.00 0.00% 40.00%);
+  
+  --accent: hsl(240.00 71.43% 98.63%);
+  --accent-foreground: hsl(240.00 10.77% 12.75%);
+  
+  --destructive: hsl(0.00 84.24% 60.20%);
+  --destructive-foreground: hsl(210.00 40.00% 98.04%);
+  
+  --border: hsl(234.00 62.50% 96.86%);
+  
+  --input: hsl(230.00 8.11% 85.49%);
+  
+  --ring: hsl(237.55 63.64% 84.90%);
+  
+  --chart-1: hsl(237.55 63.64% 84.90%);
+  --chart-2: hsl(237.14 63.64% 87.06%);
+  --chart-3: hsl(238.13 64.00% 90.20%);
+  --chart-4: hsl(237.78 62.79% 91.57%);
+  --chart-5: hsl(237.27 64.71% 93.33%);
+  
+  --sidebar: hsl(240.00 100.00% 99.80%);
+  --sidebar-foreground: hsl(240.00 11.63% 8.43%);
+  --sidebar-primary: hsl(237.55 63.64% 84.90%);  
+  --sidebar-primary-foreground: hsl(240.00 11.63% 8.43%);
+  --sidebar-accent: hsl(237.55 63.64% 84.90%);
+  --sidebar-accent-foreground: hsl(240.00 11.63% 8.43%);  
+  --sidebar-border: hsl(234.00 62.50% 96.86%);
+  --sidebar-ring: hsl(237.55 63.64% 84.90%);
+  
+  --radius: 0.5rem;
+          
 }
 
 .dark {
-  /* Dark Mode Variant */
-  --background: hsl(0, 0%, 10%); /* Deep, muted charcoal */
-  --foreground: hsl(0, 0%, 85%); /* Soft light gray */
+ 
+--background: hsl(0.00 0.00% 0.00%);
+--foreground: hsl(240.00 63.64% 97.84%);
 
-  --card: hsl(0, 0%, 15%); /* Slightly lighter dark charcoal */
-  --card-foreground: hsl(0, 0%, 75%); /* Soft gray */
+--primary: hsl(237.55 63.64% 84.90%);
+--primary-foreground: hsl(240.00 11.63% 8.43%);
 
-  --primary: hsl(0, 0%, 40%); /* Deep gray */
-  --primary-foreground: hsl(0, 0%, 100%); /* Pure white */
+--card: hsl(240.00 5.56% 7.06%);
+--card-foreground: hsl(240.00 63.64% 97.84%);
 
-  --secondary: hsl(0, 0%, 50%); /* Darker gray */
-  --secondary-foreground: hsl(0, 0%, 100%); /* Pure white */
+--popover: hsl(0.00 0.00% 0.00%);
+--popover-foreground: hsl(240.00 63.64% 97.84%);
 
-  --accent: hsl(0, 0%, 45%); /* Slightly soft gray */
-  --accent-foreground: hsl(0, 0%, 100%); /* Pure white */
+--secondary: hsl(236.47 11.26% 29.61%);
+--secondary-foreground: hsl(0.00 0.00% 100.00%);
 
-  --muted: hsl(0, 0%, 22%); /* Dark gray */
-  --muted-foreground: hsl(0, 0%, 60%); /* Soft light gray */
+--muted: hsl(0.00 0.00% 9.80%);
+--muted-foreground: hsl(0.00 0.00% 50.20%);
 
-  --destructive: hsl(0, 0%, 35%); /* Deeper gray */
-  --destructive-foreground: hsl(0, 0%, 100%); /* Pure white */
+--accent: hsl(236.47 11.26% 29.61%);
+--accent-foreground: hsl(240.00 63.64% 97.84%);
 
-  --border: hsl(0, 0%, 25%); /* Dark gray */
-  --input: hsl(0, 0%, 20%); /* Darker gray */
-  --ring: hsl(0, 0%, 40%); /* Deeper gray */
+--destructive: hsl(0.00 84.24% 60.20%);
+--destructive-foreground: hsl(210.00 40.00% 98.04%);
 
-  --chart-1: hsl(0, 0%, 30%); /* Muted gray */
-  --chart-2: hsl(0, 0%, 45%); /* Medium gray */
-  --chart-3: hsl(0, 0%, 40%); /* Deep gray */
-  --chart-4: hsl(0, 0%, 50%); /* Darker silver-gray */
+--border: hsl(234.00 11.63% 16.86%);
 
-  --sidebar: hsl(0, 0%, 15%); /* Dark charcoal */
-  --sidebar-foreground: hsl(0, 0%, 85%); /* Soft light gray */
-  --sidebar-accent: hsl(0, 0%, 40%); /* Deeper gray */
+--input: hsl(228.00 4.20% 23.33%);
+
+--ring: hsl(237.55 63.64% 84.90%);
+
+--chart-1: hsl(237.55 63.64% 84.90%);
+--chart-2: hsl(237.14 29.58% 72.16%);
+--chart-3: hsl(238.13 14.04% 55.29%);
+--chart-4: hsl(237.78 11.30% 46.86%);
+--chart-5: hsl(237.27 11.34% 38.04%);
+
+--sidebar: hsl(240.00 2.56% 7.65%);
+--sidebar-foreground: hsl(240.00 63.64% 97.84%);
+--sidebar-primary: hsl(237.55 63.64% 84.90%);  
+--sidebar-primary-foreground: hsl(240.00 11.63% 8.43%);
+--sidebar-accent: hsl(237.55 63.64% 84.90%);
+--sidebar-accent-foreground: hsl(240.00 11.63% 8.43%);  
+--sidebar-border: hsl(234.00 11.63% 16.86%);
+--sidebar-ring: hsl(237.55 63.64% 84.90%);
+
+--radius: 0.5rem;
+    
 }
 
 
