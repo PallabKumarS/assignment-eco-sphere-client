@@ -26,6 +26,8 @@ import { getAllCategories } from "@/services/CategoryService";
 import CreateIdeaModal from "@/components/modules/idea/CreateIdeaModal";
 import EditIdeaModal from "@/components/modules/idea/EditIdeaModal";
 import Image from "next/image";
+import { Modal } from "@/components/shared/Modal";
+import IdeaForm from "./IdeaForm";
 
 type Category = {
   id: string;
@@ -227,15 +229,25 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
         return (
           <div className="flex items-center justify-center gap-2">
             <>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleEdit(idea.id)}
-                disabled={!isEditable}
-                className={!isEditable ? "opacity-50 cursor-not-allowed" : ""}
-              >
-                <Pencil size={18} />
-              </Button>
+              <Modal
+                title="Edit Idea"
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEdit(idea.id)}
+                    disabled={!isEditable}
+                    className={
+                      !isEditable ? "opacity-50 cursor-not-allowed" : ""
+                    }
+                  >
+                    <Pencil size={18} />
+                  </Button>
+                }
+                content={
+                  <IdeaForm idea={idea} categories={categories} edit={true} />
+                }
+              />
               <ConfirmationBox
                 trigger={
                   <Button
@@ -262,14 +274,25 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
     <div className="space-y-7 p-6">
       <h1 className="text-center bold text-3xl">Manage Your Ideas</h1>
 
-      <Button
+      {/* <Button
         className="px-3 py-1 mb-8 bg-blue-500 text-white rounded hover:bg-blue-600"
         onClick={() => setIsModalOpen(true)}
       >
         Create An Idea
-      </Button>
+      </Button> */}
+      <Modal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        title="Add Idea"
+        trigger={
+          <Button className="px-3 py-1 mb-8 bg-blue-500 text-white rounded hover:bg-blue-600">
+            Create An Idea
+          </Button>
+        }
+        content={<IdeaForm categories={categories} />}
+      />
 
-      <CreateIdeaModal
+      {/* <CreateIdeaModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         categories={categories}
@@ -285,7 +308,7 @@ const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
         categories={categories}
         idea={editingIdea}
         onUpdate={handleUpdate}
-      />
+      /> */}
 
       <ManagementTable data={ideas} columns={columns} />
 
