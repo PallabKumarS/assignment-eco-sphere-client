@@ -32,11 +32,15 @@ type Category = {
   name: string;
 };
 
-const IdeaManagement = ({
-  query,
-}: {
-  query: Record<string, unknown>;
-}) => {
+const isValidImageUrl = (url: string) => {
+  const pattern = new RegExp(
+    "^https?:\\/\\/.+\\.(jpg|jpeg|png|webp|gif|bmp)$",
+    "i"
+  );
+  return pattern.test(url);
+};
+
+const IdeaManagement = ({ query }: { query: Record<string, unknown> }) => {
   const [ideas, setIdeas] = useState<TIdea[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [meta, setMeta] = useState<TMeta>();
@@ -198,7 +202,11 @@ const IdeaManagement = ({
         const images = row.original.images;
         return images && images.length > 0 ? (
           <Image
-            src={images[0]}
+            src={
+              isValidImageUrl(images[0])
+                ? images[0]
+                : "https://res.cloudinary.com/dchqfpvjb/image/upload/v1746446661/pngtree-light-bulb-with-brain-inside-the-concept-of-the-business-idea-image_15657372_s8io0l.jpg"
+            }
             alt={row.original.title}
             className="w-20 h-20 object-cover rounded"
             width={300}

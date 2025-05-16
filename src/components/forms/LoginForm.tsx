@@ -20,7 +20,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import ButtonLoader from "../shared/ButtonLoader";
 import { useState } from "react";
 import { loginUser } from "@/services/AuthService";
-import { useAppContext } from "@/providers/ContextProvider";
 
 const formSchema = z.object({
   email: z.string(),
@@ -33,7 +32,6 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirectPath");
   const router = useRouter();
-  const { setToken } = useAppContext();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,8 +45,6 @@ export default function LoginForm() {
       const res = await loginUser(values);
 
       if (res?.success) {
-
-        setToken(res?.data.accessToken);
         setIsLoading(false);
 
         toast.success(res?.message, { id: toastId });
