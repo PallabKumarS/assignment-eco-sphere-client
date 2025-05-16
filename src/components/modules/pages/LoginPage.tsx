@@ -124,7 +124,7 @@ const LoginPage = () => {
             <TabsTrigger value="register">Register</TabsTrigger>
           </TabsList>
 
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync">
             <TabsContent key="login-content" value="login" asChild>
               <motion.div
                 initial={{ opacity: 0, x: -50 }}

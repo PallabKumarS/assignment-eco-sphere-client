@@ -7,9 +7,9 @@ import { getMe } from "@/services/UserService";
 import { TUser } from "@/types";
 import {
   createContext,
-  Dispatch,
+  // Dispatch,
   ReactNode,
-  SetStateAction,
+  // SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -21,24 +21,22 @@ type AppContextType = {
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
   logout: () => void;
-  setToken: Dispatch<SetStateAction<string | null>>;
+  // setToken: Dispatch<SetStateAction<string | null>>;
 };
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<TUser | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [token, setToken] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initialize = async () => {
-      const token = await getToken();
-      if (token) {
-        setToken(token);
-
+      const newToken = await getToken();
+      if (newToken) {
         const storedUser = localStorage.getItem("user");
+
         if (storedUser) {
           setUser(JSON.parse(storedUser));
         } else {
@@ -50,7 +48,6 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         }
       } else {
         setUser(null);
-        setToken(null);
       }
 
       setIsLoading(false);
@@ -61,7 +58,6 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    setToken(null);
     localStorage.removeItem("user");
     deleteCookie();
   };
@@ -76,7 +72,6 @@ const ContextProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         setIsLoading,
         logout,
-        setToken,
       }}
     >
       {children}

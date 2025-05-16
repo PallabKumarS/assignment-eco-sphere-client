@@ -117,7 +117,7 @@ const PaymentHistory = ({ query }: { query: Record<string, unknown> }) => {
 
         if (status === "PAID") {
           return (
-            <Link href={payment.paymentUrl as string}>
+            <Link href={(payment?.paymentUrl as string) || ""}>
               <Button
                 variant="outline"
                 size="sm"
@@ -130,7 +130,7 @@ const PaymentHistory = ({ query }: { query: Record<string, unknown> }) => {
           );
         } else if (status === "PENDING") {
           return (
-            <Link href={payment.paymentUrl as string}>
+            <Link href={(payment.paymentUrl as string) || ""}>
               <Button
                 variant="default"
                 size="sm"
@@ -143,7 +143,7 @@ const PaymentHistory = ({ query }: { query: Record<string, unknown> }) => {
           );
         } else {
           return (
-            <Link href={payment.paymentUrl as string}>
+            <Link href={(payment.paymentUrl as string) || ""}>
               <Button
                 variant="outline"
                 size="sm"
@@ -165,7 +165,7 @@ const PaymentHistory = ({ query }: { query: Record<string, unknown> }) => {
     <div className="space-y-7">
       <h1 className="text-center font-bold text-3xl">Payment History</h1>
 
-      {payments.length === 0 ? (
+      {payments?.length === 0 ? (
         <div className="text-center p-10 border rounded-md bg-muted/30">
           <p className="text-muted-foreground">No payment records found</p>
         </div>
